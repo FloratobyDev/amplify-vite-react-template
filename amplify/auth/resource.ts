@@ -1,4 +1,8 @@
-import { defineAuth, secret } from '@aws-amplify/backend';
+import { defineAuth } from "@aws-amplify/backend";
+import { postConfirmation } from "./post-confirmation/resource";
+import { postAuthentication } from "./post-authentication/resource";
+import { preAuthentication } from "./pre-authentication/resource";
+import { preSignUp } from "./pre-signup/resource";
 
 /**
  * Define and configure your auth resource
@@ -11,24 +15,22 @@ export const auth = defineAuth({
     //   google: {
     //     clientId: secret("GOOGLE_CLIENT_ID"),
     //     clientSecret: secret("GOOGLE_CLIENT_SECRET"),
-    //     scopes: ["email", "openid", "profile"],         
+    //     scopes: ["email", "openid", "profile"],
     //   },
     //   callbackUrls: ["http://localhost:5173"],
     //   logoutUrls: ["http://localhost:5173"],
     //   },
+  },
+  userAttributes: {
+    preferredUsername: {
+      mutable: true,
+      required: true,
     },
-    userAttributes: {
-      givenName: {
-        required: false,
-        mutable: true,
-      },
-      familyName: {
-        required: false,
-        mutable: true,
-      },
-      // phoneNumber: true,
-      // country: true,
-      // birthdate: true,
-      //
-    }
-  },);
+  },
+  triggers: {
+    postConfirmation,
+    postAuthentication,
+    preAuthentication,
+    preSignUp,
+  },
+});

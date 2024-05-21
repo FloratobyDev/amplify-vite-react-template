@@ -6,18 +6,62 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
+
 const schema = a.schema({
-  Todo: a
+  ConnectionRequest: a
     .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.owner()]),
+      id: a.id().required(),
+      senderId: a.id().required(),
+      // receiverId: a.id().required(),
+      status: a.string().required(),
+      createdAt: a.datetime().required(),
+      // receiver: a.belongsTo("User", "receiverId"),
+      sender: a.belongsTo("User", "senderId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
+  Connection: a
+    .model({
+      id: a.id().required(),
+      userId: a.id().required(),
+      connectionId: a.string().required(),
+      createdAt: a.datetime().required(),
+      user: a.belongsTo("User", "userId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
+  Message: a
+    .model({
+      roomId: a.id().required(),
+      content: a.string().default(""),
+      timestamp: a.string().required(),
+      senderId: a.id().required(),
+      translatedContent: a.string().default(""),
+      translated: a.boolean().default(false),
+      room: a.belongsTo("Room", "roomId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
   User: a
     .model({
-      username: a.string(),
-    })
-    .authorization((allow) => [allow.owner()]),
-});
+      first_name: a.string().required(),
+      last_name: a.string().required(),
+      email: a.string().required(),
+      hashedPassword: a.string().required(),
+      status: a.string().default("offline"),
+      connections: a.hasMany("Connection", "userId"),
+      connectionRequests: a.hasMany("ConnectionRequest", "senderId"),
+      rooms: a.hasMany("RoomUser", "userId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
+  Room: a
+    .model({
+      createdAt: a.datetime().required(),
+      messages: a.hasMany("Message", "roomId"),
+      roomUsers: a.hasMany("RoomUser", "roomId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
+  RoomUser: a
+    .model({
+      userId: a.id().required(),
+      roomId: a.id().required(),
+      user: a.belongsTo("User", "userId"),
+      room: a.belongsTo("Room", "roomId"),
+    }).authorization(allow => [allow.authenticated().to(["read"])]),
+  });
+  
 
 export type Schema = ClientSchema<typeof schema>;
 
@@ -25,7 +69,6 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
-    // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },

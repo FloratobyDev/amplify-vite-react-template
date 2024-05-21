@@ -1,60 +1,75 @@
-import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
-import { Authenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
-
-// import { signIn } from "aws-amplify/auth";
-
-const client = generateClient<Schema>();
+// import "@aws-amplify/ui-react/styles.css";
+import { signOut } from "aws-amplify/auth";
+import { useAuth } from "./context/AuthProvider";
 
 function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+  const { setHasAuthenticated } = useAuth();
+  async function handleSignout() {
+    setHasAuthenticated(false);
+    await signOut();
   }
 
+  // const [messages, setMessages] = useState<Array<Schema["Message"]["type"]>>([]);
 
-  // function signInUser() {
-  //   signIn({
-  //     username: "admin",
-  //     password: "password",
+  // useEffect(() => {
+  //     client.models.Message.list({
+  //       filter: {
+  //         roomId: {
+  //           eq: "1",
+  //         },
+  //       },
+  //     }).then((messages) => {
+  //       setMessages(messages.data);
+  //     }).catch((error) => {
+  //       console.error("Error fetching messages:", error);
+  //     });
+
+  //   const sub = client.models.Message.onCreate({
+  //     filter: {
+  //       roomId: {
+  //         eq: "1",
+  //       },
+  //     },
+  //   }).subscribe({
+  //     next: (msg) => {
+  //       console.log("New message:");
+  //       setMessages((prevMessages) => [...prevMessages, msg]);
+  //     },
+  //     error: (error) => {
+  //       console.error("Error subscribing to messages:", error);
+  //     },
   //   });
-  // }
+  //   return () => sub.unsubscribe();
+  // }, []);
+
+  // useEffect(() => {
+  //   client.models.ConnectionRequest.onUpdate({
+  //     filter: {
+  //       receiverId: {
+  //         eq: "1",
+  //       },
+  //     },
+  //   }).subscribe({
+  //     next: (msg) => {
+  //       console.log("Connection request updated:");
+  //       console.log(msg);
+  //     },
+  //     error: (error) => {
+  //       console.error("Error subscribing to connection requests:", error);
+  //     },
+  //   });
+  // }, []);
 
   return (
-    <Authenticator>
-      {({ signOut, user }) => {
-        console.log("user", user);
-        return (
-          <main>
-            <h1>{user?.signInDetails?.loginId}'s todos</h1>
-            <button onClick={signOut}>Sign out</button>
-            <h1>My todos</h1>
-            <button onClick={createTodo}>+ new</button>
-            <ul>
-              {todos.map((todo) => (
-                <li key={todo.id}>{todo.content}</li>
-              ))}
-            </ul>
-            <div>
-              🥳 App successfully hosted. Try creating a new todo.
-              <br />
-              <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-                Review next step of this tutorial.
-              </a>
-            </div>
-          </main>
-        );
-      }}
-    </Authenticator>
+    <div
+      className="flex items-center justify-center w-full min-h-screen"
+      data-theme="dark"
+    >
+        <div>
+          <h1>My App</h1>
+          <button onClick={handleSignout}>Sign Out</button>
+        </div>
+    </div>
   );
 }
 
