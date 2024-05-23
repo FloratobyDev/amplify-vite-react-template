@@ -21,12 +21,6 @@ export const auth = defineAuth({
     //   logoutUrls: ["http://localhost:5173"],
     //   },
   },
-  userAttributes: {
-    preferredUsername: {
-      mutable: true,
-      required: true,
-    },
-  },
   triggers: {
     postConfirmation,
     postAuthentication,

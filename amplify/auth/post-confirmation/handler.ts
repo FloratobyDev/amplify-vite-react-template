@@ -9,8 +9,7 @@ Amplify.configure(
   {
     API: {
       GraphQL: {
-        endpoint:
-          "https://bzgleztxv5ga7afty2lo6ggzre.appsync-api.us-east-1.amazonaws.com/graphql",
+        endpoint: env.AMPLIFY_DATA_GRAPHQL_ENDPOINT,
         region: env.AWS_REGION,
         defaultAuthMode: "iam",
       },
@@ -39,8 +38,8 @@ const client = generateClient<Schema>({
 });
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
-
-  await client.graphql({
+  try {
+    const value = await client.graphql({
       query: createUser,
       variables: {
         input: {
@@ -51,11 +50,10 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
           status: "offline",
         },
       },
-    }).then((response) => {
-      throw new Error("User created:" + response);
-    }).catch((error) => {
-      throw new Error("Error creating user:" + error);
     });
-  
+    console.log("User created:", value);
+  } catch (error) {
+    throw new Error("Error creating user:" + error);
+  }
   return event;
 };
