@@ -55,7 +55,7 @@ function ProfileCard({
   return (
     <>
       <Modal isOpen={showModal}>
-        <FloatingCard className="w-[50%]">
+        <FloatingCard className="max-w-[50%] w-[50%] bg-blue-200">
           <div className="flex justify-between items-center gap-y-1 px-5 py-2 border-b border-b-secondary">
             <SubTitle>Profile Information</SubTitle>
             <div className="flex items-center gap-x-2">

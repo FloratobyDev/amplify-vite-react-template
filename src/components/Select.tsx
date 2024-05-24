@@ -38,7 +38,7 @@ function Select({ options, onSelect, label, selectedValue }: Props) {
         className="flex items-center gap-x-2 py-1.5 px-2 rounded-4 bg-secondary"
         onClick={handleShow}
       >
-        <Paragraph>{selectedValue || label}</Paragraph>
+        <Paragraph>{selectedValue || <span className="capitalize">{label}</span>}</Paragraph>
         {show ? <ArrowUp01Icon /> : <ArrowDown01Icon />}
       </button>
       {show && (

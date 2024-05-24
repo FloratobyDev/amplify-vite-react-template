@@ -9,7 +9,7 @@ type Props = {
 
 function Category({ activeLabel, label, onClick }: Props) {
   const divClasses = classNames(
-    "px-2 pt-2 pb-1 inline-flex flex-col items-center gap-y-1 border-b-2 cursor-pointer",
+    "px-2 inline-flex flex-col items-center gap-y-1 border-b-2 cursor-pointer",
     {
       "border-primary": activeLabel === label,
       "border-transparent": activeLabel !== label,
