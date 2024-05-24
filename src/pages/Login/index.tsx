@@ -51,7 +51,8 @@ function Login({ setHasAuthenticated }: Props) {
       username: email,
       password: password,
     })
-      .then(() => {
+      .then((response) => {
+        console.log("user info", response.isSignedIn, response.nextStep);
         setHasAuthenticated(true);
         console.log("Signed in");
       })

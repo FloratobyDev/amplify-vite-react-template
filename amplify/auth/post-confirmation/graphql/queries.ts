@@ -13,14 +13,21 @@ export const getConnection = /* GraphQL */ `query GetConnection($id: ID!) {
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -37,13 +44,20 @@ export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($i
   getConnectionRequest(id: $id) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -63,6 +77,7 @@ export const getMessage = /* GraphQL */ `query GetMessage($id: ID!) {
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -72,7 +87,6 @@ export const getMessage = /* GraphQL */ `query GetMessage($id: ID!) {
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -112,12 +126,18 @@ export const getRoomUser = /* GraphQL */ `query GetRoomUser($id: ID!) {
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -132,6 +152,8 @@ export const getRoomUser = /* GraphQL */ `query GetRoomUser($id: ID!) {
 >;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -142,14 +164,18 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename
@@ -173,6 +199,7 @@ export const listConnectionRequests = /* GraphQL */ `query ListConnectionRequest
     items {
       createdAt
       id
+      owner
       senderId
       status
       updatedAt
@@ -204,6 +231,7 @@ export const listConnections = /* GraphQL */ `query ListConnections(
       connectionId
       createdAt
       id
+      owner
       updatedAt
       userId
       __typename
@@ -226,10 +254,10 @@ export const listMessages = /* GraphQL */ `query ListMessages(
       content
       createdAt
       id
+      owner
       roomId
       senderId
       timestamp
-      translated
       translatedContent
       updatedAt
       __typename
@@ -266,10 +294,18 @@ export const listRoomUsers = /* GraphQL */ `query ListRoomUsers(
 >;
 export const listRooms = /* GraphQL */ `query ListRooms(
   $filter: ModelRoomFilterInput
+  $id: ID
   $limit: Int
   $nextToken: String
+  $sortDirection: ModelSortDirection
 ) {
-  listRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listRooms(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
     items {
       createdAt
       id
@@ -283,17 +319,31 @@ export const listRooms = /* GraphQL */ `query ListRooms(
 ` as GeneratedQuery<APITypes.ListRoomsQueryVariables, APITypes.ListRoomsQuery>;
 export const listUsers = /* GraphQL */ `query ListUsers(
   $filter: ModelUserFilterInput
+  $id: ID
   $limit: Int
   $nextToken: String
+  $sortDirection: ModelSortDirection
 ) {
-  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listUsers(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
     items {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename

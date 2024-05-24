@@ -4,14 +4,16 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import { env } from "$amplify/env/postConfirmation";
 import { createUser } from "./graphql/mutations";
+import { listUsers } from "./graphql/queries";
 
 Amplify.configure(
   {
     API: {
       GraphQL: {
-        endpoint: env.AMPLIFY_DATA_GRAPHQL_ENDPOINT,
+        endpoint:
+          "https://jqifwl4sandbdk2psugdp37y2q.appsync-api.us-east-1.amazonaws.com/graphql",
         region: env.AWS_REGION,
-        defaultAuthMode: "iam",
+        defaultAuthMode: "userPool",
       },
     },
   },
@@ -38,22 +40,20 @@ const client = generateClient<Schema>({
 });
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
-  try {
-    const value = await client.graphql({
-      query: createUser,
-      variables: {
-        input: {
-          first_name: "New",
-          last_name: "User",
-          email: "example@gmail.com",
-          hashedPassword: "password",
-          status: "offline",
-        },
+
+  await client.graphql({
+    query: createUser,
+    variables: {
+      input: {
+        id: event.request.userAttributes.sub,
+        email: event.request.userAttributes.email,
       },
-    });
-    console.log("User created:", value);
-  } catch (error) {
-    throw new Error("Error creating user:" + error);
-  }
+    },
+  });
+
+  await client.graphql({
+    query: listUsers,
+  });
+
   return event;
 };

@@ -16,14 +16,21 @@ export const createConnection = /* GraphQL */ `mutation CreateConnection(
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -43,13 +50,20 @@ export const createConnectionRequest = /* GraphQL */ `mutation CreateConnectionR
   createConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -72,6 +86,7 @@ export const createMessage = /* GraphQL */ `mutation CreateMessage(
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -81,7 +96,6 @@ export const createMessage = /* GraphQL */ `mutation CreateMessage(
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -130,12 +144,18 @@ export const createRoomUser = /* GraphQL */ `mutation CreateRoomUser(
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -153,6 +173,8 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   $input: CreateUserInput!
 ) {
   createUser(condition: $condition, input: $input) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -163,14 +185,18 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename
@@ -188,14 +214,21 @@ export const deleteConnection = /* GraphQL */ `mutation DeleteConnection(
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -215,13 +248,20 @@ export const deleteConnectionRequest = /* GraphQL */ `mutation DeleteConnectionR
   deleteConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -244,6 +284,7 @@ export const deleteMessage = /* GraphQL */ `mutation DeleteMessage(
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -253,7 +294,6 @@ export const deleteMessage = /* GraphQL */ `mutation DeleteMessage(
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -302,12 +342,18 @@ export const deleteRoomUser = /* GraphQL */ `mutation DeleteRoomUser(
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -325,6 +371,8 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   $input: DeleteUserInput!
 ) {
   deleteUser(condition: $condition, input: $input) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -335,14 +383,18 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename
@@ -360,14 +412,21 @@ export const updateConnection = /* GraphQL */ `mutation UpdateConnection(
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -387,13 +446,20 @@ export const updateConnectionRequest = /* GraphQL */ `mutation UpdateConnectionR
   updateConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -416,6 +482,7 @@ export const updateMessage = /* GraphQL */ `mutation UpdateMessage(
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -425,7 +492,6 @@ export const updateMessage = /* GraphQL */ `mutation UpdateMessage(
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -474,12 +540,18 @@ export const updateRoomUser = /* GraphQL */ `mutation UpdateRoomUser(
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -497,6 +569,8 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   $input: UpdateUserInput!
 ) {
   updateUser(condition: $condition, input: $input) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -507,14 +581,18 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename

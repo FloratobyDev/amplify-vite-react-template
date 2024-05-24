@@ -15,14 +15,21 @@ export const onCreateConnection = /* GraphQL */ `subscription OnCreateConnection
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -41,13 +48,20 @@ export const onCreateConnectionRequest = /* GraphQL */ `subscription OnCreateCon
   onCreateConnectionRequest(filter: $filter) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -67,6 +81,7 @@ export const onCreateMessage = /* GraphQL */ `subscription OnCreateMessage($filt
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -76,7 +91,6 @@ export const onCreateMessage = /* GraphQL */ `subscription OnCreateMessage($filt
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -119,12 +133,18 @@ export const onCreateRoomUser = /* GraphQL */ `subscription OnCreateRoomUser($fi
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -139,6 +159,8 @@ export const onCreateRoomUser = /* GraphQL */ `subscription OnCreateRoomUser($fi
 >;
 export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
   onCreateUser(filter: $filter) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -149,14 +171,18 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename
@@ -173,14 +199,21 @@ export const onDeleteConnection = /* GraphQL */ `subscription OnDeleteConnection
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -199,13 +232,20 @@ export const onDeleteConnectionRequest = /* GraphQL */ `subscription OnDeleteCon
   onDeleteConnectionRequest(filter: $filter) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -225,6 +265,7 @@ export const onDeleteMessage = /* GraphQL */ `subscription OnDeleteMessage($filt
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -234,7 +275,6 @@ export const onDeleteMessage = /* GraphQL */ `subscription OnDeleteMessage($filt
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -277,12 +317,18 @@ export const onDeleteRoomUser = /* GraphQL */ `subscription OnDeleteRoomUser($fi
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -297,6 +343,8 @@ export const onDeleteRoomUser = /* GraphQL */ `subscription OnDeleteRoomUser($fi
 >;
 export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
   onDeleteUser(filter: $filter) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -307,14 +355,18 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename
@@ -331,14 +383,21 @@ export const onUpdateConnection = /* GraphQL */ `subscription OnUpdateConnection
     connectionId
     createdAt
     id
+    owner
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -357,13 +416,20 @@ export const onUpdateConnectionRequest = /* GraphQL */ `subscription OnUpdateCon
   onUpdateConnectionRequest(filter: $filter) {
     createdAt
     id
+    owner
     sender {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -383,6 +449,7 @@ export const onUpdateMessage = /* GraphQL */ `subscription OnUpdateMessage($filt
     content
     createdAt
     id
+    owner
     room {
       createdAt
       id
@@ -392,7 +459,6 @@ export const onUpdateMessage = /* GraphQL */ `subscription OnUpdateMessage($filt
     roomId
     senderId
     timestamp
-    translated
     translatedContent
     updatedAt
     __typename
@@ -435,12 +501,18 @@ export const onUpdateRoomUser = /* GraphQL */ `subscription OnUpdateRoomUser($fi
     roomId
     updatedAt
     user {
+      aboutMe
+      age
       createdAt
       email
-      first_name
-      hashedPassword
+      fullName
+      gender
       id
-      last_name
+      interests
+      owner
+      profilePictureUrl
+      race
+      spokenLanguage
       status
       updatedAt
       __typename
@@ -455,6 +527,8 @@ export const onUpdateRoomUser = /* GraphQL */ `subscription OnUpdateRoomUser($fi
 >;
 export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
   onUpdateUser(filter: $filter) {
+    aboutMe
+    age
     connectionRequests {
       nextToken
       __typename
@@ -465,14 +539,18 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     }
     createdAt
     email
-    first_name
-    hashedPassword
+    fullName
+    gender
     id
-    last_name
+    interests
+    owner
+    profilePictureUrl
+    race
     rooms {
       nextToken
       __typename
     }
+    spokenLanguage
     status
     updatedAt
     __typename

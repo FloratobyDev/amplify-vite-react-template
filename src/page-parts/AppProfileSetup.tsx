@@ -9,6 +9,11 @@ import TextArea from "../components/TextArea";
 import Title from "../components/Title";
 import Cancel01Icon from "../logos/Cancel01Icon";
 import { useState } from "react";
+import type { Schema } from "../../amplify/data/resource";
+import { generateClient } from "aws-amplify/data";
+import { useAuth } from "../context/AuthProvider";
+
+const client = generateClient<Schema>();
 
 type Props = {
   closeProfile: boolean;
@@ -16,19 +21,21 @@ type Props = {
 };
 
 function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
+  const { userInformation } = useAuth();
 
-  const [userInformation, setUserInformation] = useState({
+  const [newUserInformation, setNewUserInformation] = useState({
     fullName: "",
     age: "",
     gender: "",
     race: "",
     language: "",
     interest: "",
+    aboutMe: "",
   });
 
   function handleInformation(key: string) {
     return (newValue: string) => {
-      setUserInformation({ ...userInformation, [key]: newValue });
+      setNewUserInformation({ ...newUserInformation, [key]: newValue });
     };
   }
 
@@ -245,6 +252,27 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
       onClick: stopSeeingThis,
     },
   ];
+  console.log(newUserInformation, userInformation);
+
+  async function handleSubmit() {
+    if (userInformation?.id === undefined) return;
+
+    
+    console.log("userInformation", userInformation);
+    client.models.User.update(
+      {
+        id: userInformation.id,
+        fullName: newUserInformation.fullName,
+      },
+    )
+      .then((response) => {
+        console.log("User updated successfully", response);
+        localStorage.setItem("closeProfile", "true");
+      })
+      .catch((error) => {
+        console.log("Error updating user", error);
+      });
+  }
 
   return (
     <>
@@ -280,43 +308,47 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
               <InputWithLabel
                 label="Full Name"
                 onChange={handleInformation("fullName")}
-                value={userInformation.fullName}
+                value={newUserInformation.fullName}
               />
               <div className="flex gap-x-4">
                 <InputWithLabel
                   label="Age"
                   onChange={handleInformation("age")}
-                  value={userInformation.age}
+                  value={newUserInformation.age}
                 />
                 <CustomSelect
                   label="Gender"
                   options={genderOptions}
                   onSelect={handleInformation("gender")}
-                  selectedValue={userInformation.gender}
+                  selectedValue={newUserInformation.gender}
                 />
               </div>
               <CustomSelect
                 label="Race"
                 options={raceOptions}
                 onSelect={handleInformation("race")}
-                selectedValue={userInformation.race}
+                selectedValue={newUserInformation.race}
               />
               <CustomSelect
                 label="Spoken Language"
                 options={languageOptions}
                 onSelect={handleInformation("language")}
-                selectedValue={userInformation.language}
+                selectedValue={newUserInformation.language}
               />
               <CustomSelect
                 label="Interest/s"
                 options={raceEthnicityInterests}
                 onSelect={handleInformation("interest")}
-                selectedValue={userInformation.interest}
+                selectedValue={newUserInformation.interest}
               />
-              <TextArea label="About Me" onChange={() => {}} />
+              <TextArea
+                value={newUserInformation.aboutMe}
+                label="About Me"
+                onChange={handleInformation("aboutMe")}
+              />
             </div>
           </div>
-          <Button onClick={() => {}}>
+          <Button onClick={handleSubmit}>
             <div className="px-4 py-1 bg-secondary rounded-4 hover:scale-[101%] transition-all">
               <Paragraph>Submit Profile</Paragraph>
             </div>

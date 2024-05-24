@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { postConfirmation } from "../auth/post-confirmation/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -7,61 +8,82 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 
-const schema = a.schema({
-  ConnectionRequest: a
-    .model({
-      id: a.id().required(),
-      senderId: a.id().required(),
-      // receiverId: a.id().required(),
-      status: a.string().required(),
-      createdAt: a.datetime().required(),
-      // receiver: a.belongsTo("User", "receiverId"),
-      sender: a.belongsTo("User", "senderId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  Connection: a
-    .model({
-      id: a.id().required(),
-      userId: a.id().required(),
-      connectionId: a.string().required(),
-      createdAt: a.datetime().required(),
-      user: a.belongsTo("User", "userId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  Message: a
-    .model({
-      roomId: a.id().required(),
-      content: a.string().default(""),
-      timestamp: a.string().required(),
-      senderId: a.id().required(),
-      translatedContent: a.string().default(""),
-      translated: a.boolean().default(false),
-      room: a.belongsTo("Room", "roomId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  User: a
-    .model({
-      first_name: a.string().required(),
-      last_name: a.string().required(),
-      email: a.string().required(),
-      hashedPassword: a.string().required(),
-      status: a.string().default("offline"),
-      connections: a.hasMany("Connection", "userId"),
-      connectionRequests: a.hasMany("ConnectionRequest", "senderId"),
-      rooms: a.hasMany("RoomUser", "userId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  Room: a
-    .model({
-      createdAt: a.datetime().required(),
-      messages: a.hasMany("Message", "roomId"),
-      roomUsers: a.hasMany("RoomUser", "roomId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  RoomUser: a
-    .model({
-      userId: a.id().required(),
-      roomId: a.id().required(),
-      user: a.belongsTo("User", "userId"),
-      room: a.belongsTo("Room", "roomId"),
-    }).authorization(allow => [allow.authenticated().to(["read"])]),
-  });
-  
+const schema = a
+  .schema({
+    ConnectionRequest: a
+      .model({
+        id: a.id().required(),
+        senderId: a.id().required(),
+        status: a.string().required(),
+        sender: a.belongsTo("User", "senderId"),
+      })
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.owner().to(["delete"]),
+      ]),
+    Connection: a
+      .model({
+        id: a.id().required(),
+        userId: a.id().required(),
+        connectionId: a.string().required(),
+        user: a.belongsTo("User", "userId"),
+      })
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.owner().to(["delete"]),
+      ]),
+    Message: a
+      .model({
+        roomId: a.id().required(),
+        content: a.string().default(""),
+        timestamp: a.string().required(),
+        senderId: a.id().required(),
+        translatedContent: a.string().default(""),
+        room: a.belongsTo("Room", "roomId"),
+      })
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.owner().to(["delete"]),
+      ]),
+    User: a
+      .model({
+        id: a.id().required(),
+        fullName: a.string(),
+        age: a.integer(),
+        gender: a.string(),
+        race: a.string(),
+        spokenLanguage: a.string(),
+        interests: a.string().array(),
+        aboutMe: a.string(),
+        profilePictureUrl: a.string(),
+        email: a.string().required(),
+        status: a.string().default("offline"),
+        connections: a.hasMany("Connection", "userId"),
+        connectionRequests: a.hasMany("ConnectionRequest", "senderId"),
+        rooms: a.hasMany("RoomUser", "userId"),
+      })
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.owner().to(["read", "update", "delete"]),
+      ]),
+    Room: a
+      .model({
+        id: a.id().required(),
+        createdAt: a.datetime().required(),
+        messages: a.hasMany("Message", "roomId"),
+        roomUsers: a.hasMany("RoomUser", "roomId"),
+      })
+      .authorization((allow) => [allow.authenticated().to(["read"])]),
+    RoomUser: a
+      .model({
+        userId: a.id().required(),
+        roomId: a.id().required(),
+        user: a.belongsTo("User", "userId"),
+        room: a.belongsTo("Room", "roomId"),
+      })
+      .authorization((allow) => [allow.authenticated().to(["read"])]),
+  })
+  .authorization((allow) => [allow.resource(postConfirmation)]);
 
 export type Schema = ClientSchema<typeof schema>;
 

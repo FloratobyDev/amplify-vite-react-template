@@ -4,25 +4,45 @@ import { getCurrentUser } from "aws-amplify/auth";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import classNames from "classnames";
+import { generateClient } from "aws-amplify/data";
+import { type Schema } from "../../amplify/data/resource";
 
 type Props = {
   children: React.ReactNode;
 };
 
+const client = generateClient<Schema>();
+
 type ValueType = {
   setHasAuthenticated: (value: boolean) => void;
+  userInformation: Schema["User"]["type"] | undefined;
 };
 
 export const AuthContext = createContext<ValueType | undefined>(undefined);
 
 export default function AuthProvider({ children }: Props) {
   const [hasAuthenticated, setHasAuthenticated] = useState(false);
+  const [userInformation, setUserInformation] = useState<
+    Schema["User"]["type"] | undefined
+  >(undefined);
   const [signup, setSignup] = useState(false);
 
   useEffect(() => {
-    function checkUser() {
+    async function checkUser() {
+      console.log("checking user");
       getCurrentUser()
-        .then(() => {
+        .then(async (response) => {
+          console.log("response", response);
+          client.models.User.get({
+            id: response.username,
+          })
+            .then((user) => {
+              setUserInformation(user.data as Schema["User"]["type"]);
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+
           setHasAuthenticated(true);
         })
         .catch(() => {
@@ -33,8 +53,8 @@ export default function AuthProvider({ children }: Props) {
   }, []);
 
   const value: ValueType = useMemo(
-    () => ({ setHasAuthenticated }),
-    [setHasAuthenticated]
+    () => ({ setHasAuthenticated, userInformation }),
+    [setHasAuthenticated, userInformation]
   );
 
   const loginClasses = classNames("btn join-item flex-1", {
@@ -70,7 +90,7 @@ export default function AuthProvider({ children }: Props) {
               Sign up
             </button>
           </div>
-          {signup && <Signup setHasAuthenticated={setHasAuthenticated}/>}
+          {signup && <Signup setHasAuthenticated={setHasAuthenticated} />}
           {!signup && <Login setHasAuthenticated={setHasAuthenticated} />}
         </div>
       </div>

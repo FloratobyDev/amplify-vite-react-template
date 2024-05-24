@@ -2,16 +2,18 @@ import Paragraph from "./Paragraph";
 
 type Props = {
   label: string;
-  onChange: () => void;
+  onChange: (value: string) => void;
+  value: string;
 };
 
-function TextArea({ label, onChange }: Props) {
+function TextArea({ label, onChange, value }: Props) {
   return (
     <div className="">
-         <Paragraph bold>{label}</Paragraph>
+      <Paragraph bold>{label}</Paragraph>
       <div className="">
         <textarea
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
+          value={value}
           id="textarea"
           name="textarea"
           rows={3}

@@ -4,8 +4,17 @@ import Dropdown from "../components/Dropdown";
 import Paragraph from "../components/Paragraph";
 import Search from "../components/Search";
 import ProfileLogo from "../logos/ProfileLogo";
+import { signOut } from "aws-amplify/auth";
+import { useAuth } from "../context/AuthProvider";
 
 function AppNavbar() {
+  const { setHasAuthenticated, userInformation } = useAuth();
+  async function handleSignout() {
+    setHasAuthenticated(false);
+    await signOut();
+  }
+
+
   const buttons = [
     {
       label: "Profile",
@@ -17,7 +26,7 @@ function AppNavbar() {
     },
     {
       label: "Sign Out",
-      onClick: () => console.log("Sign Out"),
+      onClick: handleSignout,
     },
   ];
 
@@ -35,7 +44,7 @@ function AppNavbar() {
             value=""
           />
         </div>
-        <Paragraph bold>Michael Mushrush</Paragraph>
+        <Paragraph bold>{userInformation?.fullName || userInformation?.email || "No name"}</Paragraph>
         <Dropdown jsxComponent={<ProfileLogo />} values={buttons} />
       </div>
     </div>

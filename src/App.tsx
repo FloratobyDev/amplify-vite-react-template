@@ -16,13 +16,13 @@ import AppCategoryList from "./page-parts/AppCategoryList";
 import AppDropdownList from "./page-parts/AppDropdownList";
 import { CategoryListType } from "./types";
 import AppProfileList from "./page-parts/AppProfileList";
+import { generateClient } from 'aws-amplify/data';
+import { type Schema } from '../amplify/data/resource'
+
+
+const client = generateClient<Schema>();
 
 function App() {
-  const { setHasAuthenticated } = useAuth();
-  async function handleSignout() {
-    setHasAuthenticated(false);
-    await signOut();
-  }
 
   // const [messages, setMessages] = useState<Array<Schema["Message"]["type"]>>([]);
 
@@ -74,6 +74,8 @@ function App() {
   //     },
   //   });
   // }, []);
+
+  
   const [feedFilters, setFeedFilters] = useState<CategoryListType>({
     category: "",
     interest: "",

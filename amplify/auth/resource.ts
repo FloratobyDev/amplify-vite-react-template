@@ -11,15 +11,6 @@ import { preSignUp } from "./pre-signup/resource";
 export const auth = defineAuth({
   loginWith: {
     email: true,
-    // externalProviders: {
-    //   google: {
-    //     clientId: secret("GOOGLE_CLIENT_ID"),
-    //     clientSecret: secret("GOOGLE_CLIENT_SECRET"),
-    //     scopes: ["email", "openid", "profile"],
-    //   },
-    //   callbackUrls: ["http://localhost:5173"],
-    //   logoutUrls: ["http://localhost:5173"],
-    //   },
   },
   triggers: {
     postConfirmation,
