@@ -1,8 +1,5 @@
 import { defineAuth } from "@aws-amplify/backend";
 import { postConfirmation } from "./post-confirmation/resource";
-import { postAuthentication } from "./post-authentication/resource";
-import { preAuthentication } from "./pre-authentication/resource";
-import { preSignUp } from "./pre-signup/resource";
 
 /**
  * Define and configure your auth resource
@@ -14,8 +11,5 @@ export const auth = defineAuth({
   },
   triggers: {
     postConfirmation,
-    postAuthentication,
-    preAuthentication,
-    preSignUp,
   },
 });

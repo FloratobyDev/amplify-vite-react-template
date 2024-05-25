@@ -28,6 +28,8 @@ export default function AuthProvider({ children }: Props) {
   >(undefined);
   const [signup, setSignup] = useState(false);
 
+  console.log("userInformation", userInformation);
+
   useEffect(() => {
     async function checkUser() {
       if (!hasAuthenticated && !hasUserInfo) {

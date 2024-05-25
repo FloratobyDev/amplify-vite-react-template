@@ -34,26 +34,6 @@ type NewUserType = {
 
 function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
   const { userInformation } = useAuth();
-  // const [options, setOptions] = useState<Array<Schema["DropdownList"]["type"]>>(
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   async function fetchDropdownList() {
-  //     const response = await client.models.DropdownList.list();
-  //     console.log("response", response);
-  //     // if (errors) {
-  //     //   console.error(errors);
-  //     //   return;
-  //     // }
-  //     // if (data) {
-  //     //   console.log("data", data);
-
-  //     //   // setOptions(data);
-  //     // }
-  //   }
-  //   fetchDropdownList();
-  // }, []);
 
   const [newUserInformation, setNewUserInformation] = useState<NewUserType>({
     fullName: "",
@@ -308,6 +288,11 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
     client.models.User.update(
       {
         id: userInformation.id,
+        fullName: newUserInformation.fullName,
+        age: parseInt(newUserInformation.age) || -1,
+        spokenLanguage: newUserInformation.language,
+        interests: [newUserInformation.interest],
+        aboutMe: newUserInformation.aboutMe,
         profilePictureUrl: profilePicturePath,
       },
       {
