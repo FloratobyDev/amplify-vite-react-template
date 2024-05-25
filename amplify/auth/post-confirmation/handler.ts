@@ -11,7 +11,7 @@ Amplify.configure(
       GraphQL: {
         endpoint: env.AMPLIFY_DATA_GRAPHQL_ENDPOINT,
         region: env.AWS_REGION,
-        defaultAuthMode: "userPool",
+        defaultAuthMode: "iam",
       },
     },
   },
@@ -34,7 +34,7 @@ Amplify.configure(
 );
 
 const client = generateClient<Schema>({
-  authMode: "iam",
+  authMode: "userPool",
 });
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
