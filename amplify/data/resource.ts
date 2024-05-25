@@ -67,7 +67,7 @@ const schema = a
         rooms: a.hasMany("RoomUser", "userId"),
       })
       .authorization((allow) => [
-        allow.owner().to(["read", "update", "delete"]),
+        allow.authenticated().to(["read", "update", "delete"]),
       ]),
     Room: a
       .model({
