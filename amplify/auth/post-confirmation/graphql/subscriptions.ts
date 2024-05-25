@@ -1,3 +1,5 @@
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 import * as APITypes from "./API";
@@ -12,7 +14,6 @@ export const onCreateConnection = /* GraphQL */ `subscription OnCreateConnection
   onCreateConnection(filter: $filter) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
@@ -254,7 +255,6 @@ export const onDeleteConnection = /* GraphQL */ `subscription OnDeleteConnection
   onDeleteConnection(filter: $filter) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
@@ -496,7 +496,6 @@ export const onUpdateConnection = /* GraphQL */ `subscription OnUpdateConnection
   onUpdateConnection(filter: $filter) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe

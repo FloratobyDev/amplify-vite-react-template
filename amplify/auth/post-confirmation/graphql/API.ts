@@ -1,10 +1,11 @@
+/* tslint:disable */
+/* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
 export type Connection = {
   __typename: "Connection",
   connectionId: string,
   createdAt: string,
-  id: string,
   updatedAt: string,
   user?: User | null,
   userId: string,
@@ -43,7 +44,7 @@ export type ConnectionReceived = {
   receiver?: User | null,
   receiverId: string,
   senderId: string,
-  status: string,
+  status?: string | null,
   updatedAt: string,
 };
 
@@ -59,7 +60,7 @@ export type ConnectionRequest = {
   receiverId: string,
   sender?: User | null,
   senderId: string,
-  status: string,
+  status?: string | null,
   updatedAt: string,
 };
 
@@ -227,6 +228,16 @@ export type ModelConnectionRequestFilterInput = {
   updatedAt?: ModelStringInput | null,
 };
 
+export type ModelStringKeyConditionInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  le?: string | null,
+  lt?: string | null,
+};
+
 export type ModelConnectionFilterInput = {
   and?: Array< ModelConnectionFilterInput | null > | null,
   connectionId?: ModelStringInput | null,
@@ -350,17 +361,14 @@ export type ModelUserConnection = {
 
 export type ModelConnectionConditionInput = {
   and?: Array< ModelConnectionConditionInput | null > | null,
-  connectionId?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   not?: ModelConnectionConditionInput | null,
   or?: Array< ModelConnectionConditionInput | null > | null,
   updatedAt?: ModelStringInput | null,
-  userId?: ModelIDInput | null,
 };
 
 export type CreateConnectionInput = {
   connectionId: string,
-  id?: string | null,
   userId: string,
 };
 
@@ -376,7 +384,7 @@ export type ModelConnectionReceivedConditionInput = {
 export type CreateConnectionReceivedInput = {
   receiverId: string,
   senderId: string,
-  status: string,
+  status?: string | null,
 };
 
 export type ModelConnectionRequestConditionInput = {
@@ -391,7 +399,7 @@ export type ModelConnectionRequestConditionInput = {
 export type CreateConnectionRequestInput = {
   receiverId: string,
   senderId: string,
-  status: string,
+  status?: string | null,
 };
 
 export type ModelDropdownListConditionInput = {
@@ -507,7 +515,8 @@ export type CreateUserInput = {
 };
 
 export type DeleteConnectionInput = {
-  id: string,
+  connectionId: string,
+  userId: string,
 };
 
 export type DeleteConnectionReceivedInput = {
@@ -545,9 +554,8 @@ export type DeleteUserInput = {
 };
 
 export type UpdateConnectionInput = {
-  connectionId?: string | null,
-  id: string,
-  userId?: string | null,
+  connectionId: string,
+  userId: string,
 };
 
 export type UpdateConnectionReceivedInput = {
@@ -749,7 +757,8 @@ export type ModelSubscriptionIntInput = {
 };
 
 export type GetConnectionQueryVariables = {
-  id: string,
+  connectionId: string,
+  userId: string,
 };
 
 export type GetConnectionQuery = {
@@ -757,7 +766,6 @@ export type GetConnectionQuery = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -806,7 +814,7 @@ export type GetConnectionReceivedQuery = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -838,7 +846,7 @@ export type GetConnectionRequestQuery = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1010,7 +1018,7 @@ export type ListConnectionReceivedsQuery = {
       createdAt: string,
       receiverId: string,
       senderId: string,
-      status: string,
+      status?: string | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -1034,7 +1042,7 @@ export type ListConnectionRequestsQuery = {
       createdAt: string,
       receiverId: string,
       senderId: string,
-      status: string,
+      status?: string | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -1042,11 +1050,12 @@ export type ListConnectionRequestsQuery = {
 };
 
 export type ListConnectionsQueryVariables = {
+  connectionId?: ModelStringKeyConditionInput | null,
   filter?: ModelConnectionFilterInput | null,
-  id?: string | null,
   limit?: number | null,
   nextToken?: string | null,
   sortDirection?: ModelSortDirection | null,
+  userId?: string | null,
 };
 
 export type ListConnectionsQuery = {
@@ -1056,7 +1065,6 @@ export type ListConnectionsQuery = {
       __typename: "Connection",
       connectionId: string,
       createdAt: string,
-      id: string,
       updatedAt: string,
       userId: string,
     } | null >,
@@ -1216,7 +1224,6 @@ export type CreateConnectionMutation = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1265,7 +1272,7 @@ export type CreateConnectionReceivedMutation = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1297,7 +1304,7 @@ export type CreateConnectionRequestMutation = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1468,7 +1475,6 @@ export type DeleteConnectionMutation = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1517,7 +1523,7 @@ export type DeleteConnectionReceivedMutation = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1549,7 +1555,7 @@ export type DeleteConnectionRequestMutation = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1720,7 +1726,6 @@ export type UpdateConnectionMutation = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1769,7 +1774,7 @@ export type UpdateConnectionReceivedMutation = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1801,7 +1806,7 @@ export type UpdateConnectionRequestMutation = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1971,7 +1976,6 @@ export type OnCreateConnectionSubscription = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -2019,7 +2023,7 @@ export type OnCreateConnectionReceivedSubscription = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -2050,7 +2054,7 @@ export type OnCreateConnectionRequestSubscription = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -2214,7 +2218,6 @@ export type OnDeleteConnectionSubscription = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -2262,7 +2265,7 @@ export type OnDeleteConnectionReceivedSubscription = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -2293,7 +2296,7 @@ export type OnDeleteConnectionRequestSubscription = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -2457,7 +2460,6 @@ export type OnUpdateConnectionSubscription = {
     __typename: "Connection",
     connectionId: string,
     createdAt: string,
-    id: string,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -2505,7 +2507,7 @@ export type OnUpdateConnectionReceivedSubscription = {
     } | null,
     receiverId: string,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -2536,7 +2538,7 @@ export type OnUpdateConnectionRequestSubscription = {
       updatedAt: string,
     } | null,
     senderId: string,
-    status: string,
+    status?: string | null,
     updatedAt: string,
   } | null,
 };

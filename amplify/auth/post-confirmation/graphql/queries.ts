@@ -1,3 +1,5 @@
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 import * as APITypes from "./API";
@@ -6,11 +8,10 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const getConnection = /* GraphQL */ `query GetConnection($id: ID!) {
-  getConnection(id: $id) {
+export const getConnection = /* GraphQL */ `query GetConnection($connectionId: String!, $userId: ID!) {
+  getConnection(connectionId: $connectionId, userId: $userId) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
@@ -299,23 +300,24 @@ export const listConnectionRequests = /* GraphQL */ `query ListConnectionRequest
   APITypes.ListConnectionRequestsQuery
 >;
 export const listConnections = /* GraphQL */ `query ListConnections(
+  $connectionId: ModelStringKeyConditionInput
   $filter: ModelConnectionFilterInput
-  $id: ID
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
+  $userId: ID
 ) {
   listConnections(
+    connectionId: $connectionId
     filter: $filter
-    id: $id
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
+    userId: $userId
   ) {
     items {
       connectionId
       createdAt
-      id
       updatedAt
       userId
       __typename

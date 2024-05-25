@@ -1,3 +1,5 @@
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 import * as APITypes from "./API";
@@ -13,7 +15,6 @@ export const createConnection = /* GraphQL */ `mutation CreateConnection(
   createConnection(condition: $condition, input: $input) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
@@ -274,7 +275,6 @@ export const deleteConnection = /* GraphQL */ `mutation DeleteConnection(
   deleteConnection(condition: $condition, input: $input) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
@@ -535,7 +535,6 @@ export const updateConnection = /* GraphQL */ `mutation UpdateConnection(
   updateConnection(condition: $condition, input: $input) {
     connectionId
     createdAt
-    id
     updatedAt
     user {
       aboutMe
