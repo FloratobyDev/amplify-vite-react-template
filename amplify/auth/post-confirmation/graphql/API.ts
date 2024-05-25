@@ -16,6 +16,7 @@ export type User = {
   __typename: "User",
   aboutMe?: string | null,
   age?: number | null,
+  connectionReceived?: ModelConnectionReceivedConnection | null,
   connectionRequests?: ModelConnectionRequestConnection | null,
   connections?: ModelConnectionConnection | null,
   createdAt: string,
@@ -32,6 +33,22 @@ export type User = {
   updatedAt: string,
 };
 
+export type ModelConnectionReceivedConnection = {
+  __typename: "ModelConnectionReceivedConnection",
+  items:  Array<ConnectionReceived | null >,
+  nextToken?: string | null,
+};
+
+export type ConnectionReceived = {
+  __typename: "ConnectionReceived",
+  createdAt: string,
+  receiver?: User | null,
+  receiverId: string,
+  senderId: string,
+  status: string,
+  updatedAt: string,
+};
+
 export type ModelConnectionRequestConnection = {
   __typename: "ModelConnectionRequestConnection",
   items:  Array<ConnectionRequest | null >,
@@ -41,7 +58,7 @@ export type ModelConnectionRequestConnection = {
 export type ConnectionRequest = {
   __typename: "ConnectionRequest",
   createdAt: string,
-  id: string,
+  receiverId: string,
   sender?: User | null,
   senderId: string,
   status: string,
@@ -108,12 +125,21 @@ export type DropdownList = {
   updatedAt: string,
 };
 
-export type ModelConnectionRequestFilterInput = {
-  and?: Array< ModelConnectionRequestFilterInput | null > | null,
+export type RaceList = {
+  __typename: "RaceList",
+  createdAt: string,
+  id: string,
+  name: string,
+  updatedAt: string,
+};
+
+export type ModelConnectionReceivedFilterInput = {
+  and?: Array< ModelConnectionReceivedFilterInput | null > | null,
   createdAt?: ModelStringInput | null,
   id?: ModelIDInput | null,
-  not?: ModelConnectionRequestFilterInput | null,
-  or?: Array< ModelConnectionRequestFilterInput | null > | null,
+  not?: ModelConnectionReceivedFilterInput | null,
+  or?: Array< ModelConnectionReceivedFilterInput | null > | null,
+  receiverId?: ModelIDInput | null,
   senderId?: ModelIDInput | null,
   status?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -175,11 +201,33 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelIDKeyConditionInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  le?: string | null,
+  lt?: string | null,
+};
+
 export enum ModelSortDirection {
   ASC = "ASC",
   DESC = "DESC",
 }
 
+
+export type ModelConnectionRequestFilterInput = {
+  and?: Array< ModelConnectionRequestFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelConnectionRequestFilterInput | null,
+  or?: Array< ModelConnectionRequestFilterInput | null > | null,
+  receiverId?: ModelIDInput | null,
+  senderId?: ModelIDInput | null,
+  status?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
 
 export type ModelConnectionFilterInput = {
   and?: Array< ModelConnectionFilterInput | null > | null,
@@ -221,6 +269,22 @@ export type ModelMessageFilterInput = {
   timestamp?: ModelStringInput | null,
   translatedContent?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type ModelRaceListFilterInput = {
+  and?: Array< ModelRaceListFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelRaceListFilterInput | null,
+  or?: Array< ModelRaceListFilterInput | null > | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelRaceListConnection = {
+  __typename: "ModelRaceListConnection",
+  items:  Array<RaceList | null >,
+  nextToken?: string | null,
 };
 
 export type ModelRoomUserFilterInput = {
@@ -302,18 +366,32 @@ export type CreateConnectionInput = {
   userId: string,
 };
 
+export type ModelConnectionReceivedConditionInput = {
+  and?: Array< ModelConnectionReceivedConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  not?: ModelConnectionReceivedConditionInput | null,
+  or?: Array< ModelConnectionReceivedConditionInput | null > | null,
+  status?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateConnectionReceivedInput = {
+  receiverId: string,
+  senderId: string,
+  status: string,
+};
+
 export type ModelConnectionRequestConditionInput = {
   and?: Array< ModelConnectionRequestConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
   not?: ModelConnectionRequestConditionInput | null,
   or?: Array< ModelConnectionRequestConditionInput | null > | null,
-  senderId?: ModelIDInput | null,
   status?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
 export type CreateConnectionRequestInput = {
-  id?: string | null,
+  receiverId: string,
   senderId: string,
   status: string,
 };
@@ -356,6 +434,20 @@ export type CreateMessageInput = {
   translatedContent?: string | null,
 };
 
+export type ModelRaceListConditionInput = {
+  and?: Array< ModelRaceListConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelRaceListConditionInput | null,
+  or?: Array< ModelRaceListConditionInput | null > | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateRaceListInput = {
+  id?: string | null,
+  name: string,
+};
+
 export type ModelRoomConditionInput = {
   and?: Array< ModelRoomConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
@@ -365,7 +457,6 @@ export type ModelRoomConditionInput = {
 };
 
 export type CreateRoomInput = {
-  createdAt?: string | null,
   id?: string | null,
 };
 
@@ -421,8 +512,14 @@ export type DeleteConnectionInput = {
   id: string,
 };
 
+export type DeleteConnectionReceivedInput = {
+  receiverId: string,
+  senderId: string,
+};
+
 export type DeleteConnectionRequestInput = {
-  id: string,
+  receiverId: string,
+  senderId: string,
 };
 
 export type DeleteDropdownListInput = {
@@ -430,6 +527,10 @@ export type DeleteDropdownListInput = {
 };
 
 export type DeleteMessageInput = {
+  id: string,
+};
+
+export type DeleteRaceListInput = {
   id: string,
 };
 
@@ -451,9 +552,15 @@ export type UpdateConnectionInput = {
   userId?: string | null,
 };
 
+export type UpdateConnectionReceivedInput = {
+  receiverId: string,
+  senderId: string,
+  status?: string | null,
+};
+
 export type UpdateConnectionRequestInput = {
-  id: string,
-  senderId?: string | null,
+  receiverId: string,
+  senderId: string,
   status?: string | null,
 };
 
@@ -472,8 +579,12 @@ export type UpdateMessageInput = {
   translatedContent?: string | null,
 };
 
+export type UpdateRaceListInput = {
+  id: string,
+  name?: string | null,
+};
+
 export type UpdateRoomInput = {
-  createdAt?: string | null,
   id: string,
 };
 
@@ -537,11 +648,23 @@ export type ModelSubscriptionIDInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionConnectionReceivedFilterInput = {
+  and?: Array< ModelSubscriptionConnectionReceivedFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  or?: Array< ModelSubscriptionConnectionReceivedFilterInput | null > | null,
+  receiverId?: ModelSubscriptionIDInput | null,
+  senderId?: ModelSubscriptionIDInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
 export type ModelSubscriptionConnectionRequestFilterInput = {
   and?: Array< ModelSubscriptionConnectionRequestFilterInput | null > | null,
   createdAt?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   or?: Array< ModelSubscriptionConnectionRequestFilterInput | null > | null,
+  receiverId?: ModelSubscriptionIDInput | null,
   senderId?: ModelSubscriptionIDInput | null,
   status?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
@@ -567,6 +690,15 @@ export type ModelSubscriptionMessageFilterInput = {
   senderId?: ModelSubscriptionIDInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
   translatedContent?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionRaceListFilterInput = {
+  and?: Array< ModelSubscriptionRaceListFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  or?: Array< ModelSubscriptionRaceListFilterInput | null > | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
@@ -649,15 +781,48 @@ export type GetConnectionQuery = {
   } | null,
 };
 
+export type GetConnectionReceivedQueryVariables = {
+  receiverId: string,
+  senderId: string,
+};
+
+export type GetConnectionReceivedQuery = {
+  getConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetConnectionRequestQueryVariables = {
-  id: string,
+  receiverId: string,
+  senderId: string,
 };
 
 export type GetConnectionRequestQuery = {
   getConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -715,6 +880,20 @@ export type GetMessageQuery = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetRaceListQueryVariables = {
+  id: string,
+};
+
+export type GetRaceListQuery = {
+  getRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -786,6 +965,10 @@ export type GetUserQuery = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -812,11 +995,36 @@ export type GetUserQuery = {
   } | null,
 };
 
-export type ListConnectionRequestsQueryVariables = {
-  filter?: ModelConnectionRequestFilterInput | null,
-  id?: string | null,
+export type ListConnectionReceivedsQueryVariables = {
+  filter?: ModelConnectionReceivedFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
+  receiverId?: ModelIDKeyConditionInput | null,
+  senderId?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListConnectionReceivedsQuery = {
+  listConnectionReceiveds?:  {
+    __typename: "ModelConnectionReceivedConnection",
+    items:  Array< {
+      __typename: "ConnectionReceived",
+      createdAt: string,
+      receiverId: string,
+      senderId: string,
+      status: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListConnectionRequestsQueryVariables = {
+  filter?: ModelConnectionRequestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  receiverId?: ModelIDKeyConditionInput | null,
+  senderId?: string | null,
   sortDirection?: ModelSortDirection | null,
 };
 
@@ -826,7 +1034,7 @@ export type ListConnectionRequestsQuery = {
     items:  Array< {
       __typename: "ConnectionRequest",
       createdAt: string,
-      id: string,
+      receiverId: string,
       senderId: string,
       status: string,
       updatedAt: string,
@@ -899,6 +1107,28 @@ export type ListMessagesQuery = {
       senderId: string,
       timestamp: string,
       translatedContent?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListRaceListsQueryVariables = {
+  filter?: ModelRaceListFilterInput | null,
+  id?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListRaceListsQuery = {
+  listRaceLists?:  {
+    __typename: "ModelRaceListConnection",
+    items:  Array< {
+      __typename: "RaceList",
+      createdAt: string,
+      id: string,
+      name: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -1010,6 +1240,38 @@ export type CreateConnectionMutation = {
   } | null,
 };
 
+export type CreateConnectionReceivedMutationVariables = {
+  condition?: ModelConnectionReceivedConditionInput | null,
+  input: CreateConnectionReceivedInput,
+};
+
+export type CreateConnectionReceivedMutation = {
+  createConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateConnectionRequestMutationVariables = {
   condition?: ModelConnectionRequestConditionInput | null,
   input: CreateConnectionRequestInput,
@@ -1019,7 +1281,7 @@ export type CreateConnectionRequestMutation = {
   createConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1079,6 +1341,21 @@ export type CreateMessageMutation = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateRaceListMutationVariables = {
+  condition?: ModelRaceListConditionInput | null,
+  input: CreateRaceListInput,
+};
+
+export type CreateRaceListMutation = {
+  createRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -1153,6 +1430,10 @@ export type CreateUserMutation = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -1211,6 +1492,38 @@ export type DeleteConnectionMutation = {
   } | null,
 };
 
+export type DeleteConnectionReceivedMutationVariables = {
+  condition?: ModelConnectionReceivedConditionInput | null,
+  input: DeleteConnectionReceivedInput,
+};
+
+export type DeleteConnectionReceivedMutation = {
+  deleteConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type DeleteConnectionRequestMutationVariables = {
   condition?: ModelConnectionRequestConditionInput | null,
   input: DeleteConnectionRequestInput,
@@ -1220,7 +1533,7 @@ export type DeleteConnectionRequestMutation = {
   deleteConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1280,6 +1593,21 @@ export type DeleteMessageMutation = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteRaceListMutationVariables = {
+  condition?: ModelRaceListConditionInput | null,
+  input: DeleteRaceListInput,
+};
+
+export type DeleteRaceListMutation = {
+  deleteRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -1354,6 +1682,10 @@ export type DeleteUserMutation = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -1412,6 +1744,38 @@ export type UpdateConnectionMutation = {
   } | null,
 };
 
+export type UpdateConnectionReceivedMutationVariables = {
+  condition?: ModelConnectionReceivedConditionInput | null,
+  input: UpdateConnectionReceivedInput,
+};
+
+export type UpdateConnectionReceivedMutation = {
+  updateConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type UpdateConnectionRequestMutationVariables = {
   condition?: ModelConnectionRequestConditionInput | null,
   input: UpdateConnectionRequestInput,
@@ -1421,7 +1785,7 @@ export type UpdateConnectionRequestMutation = {
   updateConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1481,6 +1845,21 @@ export type UpdateMessageMutation = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateRaceListMutationVariables = {
+  condition?: ModelRaceListConditionInput | null,
+  input: UpdateRaceListInput,
+};
+
+export type UpdateRaceListMutation = {
+  updateRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -1555,6 +1934,10 @@ export type UpdateUserMutation = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -1612,6 +1995,37 @@ export type OnCreateConnectionSubscription = {
   } | null,
 };
 
+export type OnCreateConnectionReceivedSubscriptionVariables = {
+  filter?: ModelSubscriptionConnectionReceivedFilterInput | null,
+};
+
+export type OnCreateConnectionReceivedSubscription = {
+  onCreateConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateConnectionRequestSubscriptionVariables = {
   filter?: ModelSubscriptionConnectionRequestFilterInput | null,
 };
@@ -1620,7 +2034,7 @@ export type OnCreateConnectionRequestSubscription = {
   onCreateConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1678,6 +2092,20 @@ export type OnCreateMessageSubscription = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateRaceListSubscriptionVariables = {
+  filter?: ModelSubscriptionRaceListFilterInput | null,
+};
+
+export type OnCreateRaceListSubscription = {
+  onCreateRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -1749,6 +2177,10 @@ export type OnCreateUserSubscription = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -1806,6 +2238,37 @@ export type OnDeleteConnectionSubscription = {
   } | null,
 };
 
+export type OnDeleteConnectionReceivedSubscriptionVariables = {
+  filter?: ModelSubscriptionConnectionReceivedFilterInput | null,
+};
+
+export type OnDeleteConnectionReceivedSubscription = {
+  onDeleteConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnDeleteConnectionRequestSubscriptionVariables = {
   filter?: ModelSubscriptionConnectionRequestFilterInput | null,
 };
@@ -1814,7 +2277,7 @@ export type OnDeleteConnectionRequestSubscription = {
   onDeleteConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1872,6 +2335,20 @@ export type OnDeleteMessageSubscription = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteRaceListSubscriptionVariables = {
+  filter?: ModelSubscriptionRaceListFilterInput | null,
+};
+
+export type OnDeleteRaceListSubscription = {
+  onDeleteRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -1943,6 +2420,10 @@ export type OnDeleteUserSubscription = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,
@@ -2000,6 +2481,37 @@ export type OnUpdateConnectionSubscription = {
   } | null,
 };
 
+export type OnUpdateConnectionReceivedSubscriptionVariables = {
+  filter?: ModelSubscriptionConnectionReceivedFilterInput | null,
+};
+
+export type OnUpdateConnectionReceivedSubscription = {
+  onUpdateConnectionReceived?:  {
+    __typename: "ConnectionReceived",
+    createdAt: string,
+    receiver?:  {
+      __typename: "User",
+      aboutMe?: string | null,
+      age?: number | null,
+      createdAt: string,
+      email: string,
+      fullName?: string | null,
+      gender?: string | null,
+      id: string,
+      interests?: Array< string | null > | null,
+      profilePictureUrl?: string | null,
+      race?: string | null,
+      spokenLanguage?: string | null,
+      status?: string | null,
+      updatedAt: string,
+    } | null,
+    receiverId: string,
+    senderId: string,
+    status: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnUpdateConnectionRequestSubscriptionVariables = {
   filter?: ModelSubscriptionConnectionRequestFilterInput | null,
 };
@@ -2008,7 +2520,7 @@ export type OnUpdateConnectionRequestSubscription = {
   onUpdateConnectionRequest?:  {
     __typename: "ConnectionRequest",
     createdAt: string,
-    id: string,
+    receiverId: string,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -2066,6 +2578,20 @@ export type OnUpdateMessageSubscription = {
     senderId: string,
     timestamp: string,
     translatedContent?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateRaceListSubscriptionVariables = {
+  filter?: ModelSubscriptionRaceListFilterInput | null,
+};
+
+export type OnUpdateRaceListSubscription = {
+  onUpdateRaceList?:  {
+    __typename: "RaceList",
+    createdAt: string,
+    id: string,
+    name: string,
     updatedAt: string,
   } | null,
 };
@@ -2137,6 +2663,10 @@ export type OnUpdateUserSubscription = {
     __typename: "User",
     aboutMe?: string | null,
     age?: number | null,
+    connectionReceived?:  {
+      __typename: "ModelConnectionReceivedConnection",
+      nextToken?: string | null,
+    } | null,
     connectionRequests?:  {
       __typename: "ModelConnectionRequestConnection",
       nextToken?: string | null,

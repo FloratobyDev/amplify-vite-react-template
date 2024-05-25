@@ -40,12 +40,44 @@ export const onCreateConnection = /* GraphQL */ `subscription OnCreateConnection
   APITypes.OnCreateConnectionSubscriptionVariables,
   APITypes.OnCreateConnectionSubscription
 >;
+export const onCreateConnectionReceived = /* GraphQL */ `subscription OnCreateConnectionReceived(
+  $filter: ModelSubscriptionConnectionReceivedFilterInput
+) {
+  onCreateConnectionReceived(filter: $filter) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateConnectionReceivedSubscriptionVariables,
+  APITypes.OnCreateConnectionReceivedSubscription
+>;
 export const onCreateConnectionRequest = /* GraphQL */ `subscription OnCreateConnectionRequest(
   $filter: ModelSubscriptionConnectionRequestFilterInput
 ) {
   onCreateConnectionRequest(filter: $filter) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -111,6 +143,19 @@ export const onCreateMessage = /* GraphQL */ `subscription OnCreateMessage($filt
   APITypes.OnCreateMessageSubscriptionVariables,
   APITypes.OnCreateMessageSubscription
 >;
+export const onCreateRaceList = /* GraphQL */ `subscription OnCreateRaceList($filter: ModelSubscriptionRaceListFilterInput) {
+  onCreateRaceList(filter: $filter) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateRaceListSubscriptionVariables,
+  APITypes.OnCreateRaceListSubscription
+>;
 export const onCreateRoom = /* GraphQL */ `subscription OnCreateRoom($filter: ModelSubscriptionRoomFilterInput) {
   onCreateRoom(filter: $filter) {
     createdAt
@@ -171,6 +216,10 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
   onCreateUser(filter: $filter) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
@@ -233,12 +282,44 @@ export const onDeleteConnection = /* GraphQL */ `subscription OnDeleteConnection
   APITypes.OnDeleteConnectionSubscriptionVariables,
   APITypes.OnDeleteConnectionSubscription
 >;
+export const onDeleteConnectionReceived = /* GraphQL */ `subscription OnDeleteConnectionReceived(
+  $filter: ModelSubscriptionConnectionReceivedFilterInput
+) {
+  onDeleteConnectionReceived(filter: $filter) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteConnectionReceivedSubscriptionVariables,
+  APITypes.OnDeleteConnectionReceivedSubscription
+>;
 export const onDeleteConnectionRequest = /* GraphQL */ `subscription OnDeleteConnectionRequest(
   $filter: ModelSubscriptionConnectionRequestFilterInput
 ) {
   onDeleteConnectionRequest(filter: $filter) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -304,6 +385,19 @@ export const onDeleteMessage = /* GraphQL */ `subscription OnDeleteMessage($filt
   APITypes.OnDeleteMessageSubscriptionVariables,
   APITypes.OnDeleteMessageSubscription
 >;
+export const onDeleteRaceList = /* GraphQL */ `subscription OnDeleteRaceList($filter: ModelSubscriptionRaceListFilterInput) {
+  onDeleteRaceList(filter: $filter) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteRaceListSubscriptionVariables,
+  APITypes.OnDeleteRaceListSubscription
+>;
 export const onDeleteRoom = /* GraphQL */ `subscription OnDeleteRoom($filter: ModelSubscriptionRoomFilterInput) {
   onDeleteRoom(filter: $filter) {
     createdAt
@@ -364,6 +458,10 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
   onDeleteUser(filter: $filter) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
@@ -426,12 +524,44 @@ export const onUpdateConnection = /* GraphQL */ `subscription OnUpdateConnection
   APITypes.OnUpdateConnectionSubscriptionVariables,
   APITypes.OnUpdateConnectionSubscription
 >;
+export const onUpdateConnectionReceived = /* GraphQL */ `subscription OnUpdateConnectionReceived(
+  $filter: ModelSubscriptionConnectionReceivedFilterInput
+) {
+  onUpdateConnectionReceived(filter: $filter) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateConnectionReceivedSubscriptionVariables,
+  APITypes.OnUpdateConnectionReceivedSubscription
+>;
 export const onUpdateConnectionRequest = /* GraphQL */ `subscription OnUpdateConnectionRequest(
   $filter: ModelSubscriptionConnectionRequestFilterInput
 ) {
   onUpdateConnectionRequest(filter: $filter) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -497,6 +627,19 @@ export const onUpdateMessage = /* GraphQL */ `subscription OnUpdateMessage($filt
   APITypes.OnUpdateMessageSubscriptionVariables,
   APITypes.OnUpdateMessageSubscription
 >;
+export const onUpdateRaceList = /* GraphQL */ `subscription OnUpdateRaceList($filter: ModelSubscriptionRaceListFilterInput) {
+  onUpdateRaceList(filter: $filter) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateRaceListSubscriptionVariables,
+  APITypes.OnUpdateRaceListSubscription
+>;
 export const onUpdateRoom = /* GraphQL */ `subscription OnUpdateRoom($filter: ModelSubscriptionRoomFilterInput) {
   onUpdateRoom(filter: $filter) {
     createdAt
@@ -557,6 +700,10 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
   onUpdateUser(filter: $filter) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename

@@ -38,10 +38,40 @@ export const getConnection = /* GraphQL */ `query GetConnection($id: ID!) {
   APITypes.GetConnectionQueryVariables,
   APITypes.GetConnectionQuery
 >;
-export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($id: ID!) {
-  getConnectionRequest(id: $id) {
+export const getConnectionReceived = /* GraphQL */ `query GetConnectionReceived($receiverId: ID!, $senderId: ID!) {
+  getConnectionReceived(receiverId: $receiverId, senderId: $senderId) {
     createdAt
-    id
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetConnectionReceivedQueryVariables,
+  APITypes.GetConnectionReceivedQuery
+>;
+export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($receiverId: ID!, $senderId: ID!) {
+  getConnectionRequest(receiverId: $receiverId, senderId: $senderId) {
+    createdAt
+    receiverId
     sender {
       aboutMe
       age
@@ -105,6 +135,19 @@ export const getMessage = /* GraphQL */ `query GetMessage($id: ID!) {
   APITypes.GetMessageQueryVariables,
   APITypes.GetMessageQuery
 >;
+export const getRaceList = /* GraphQL */ `query GetRaceList($id: ID!) {
+  getRaceList(id: $id) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetRaceListQueryVariables,
+  APITypes.GetRaceListQuery
+>;
 export const getRoom = /* GraphQL */ `query GetRoom($id: ID!) {
   getRoom(id: $id) {
     createdAt
@@ -162,6 +205,10 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
@@ -189,23 +236,57 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetUserQueryVariables, APITypes.GetUserQuery>;
-export const listConnectionRequests = /* GraphQL */ `query ListConnectionRequests(
-  $filter: ModelConnectionRequestFilterInput
-  $id: ID
+export const listConnectionReceiveds = /* GraphQL */ `query ListConnectionReceiveds(
+  $filter: ModelConnectionReceivedFilterInput
   $limit: Int
   $nextToken: String
+  $receiverId: ModelIDKeyConditionInput
+  $senderId: ID
   $sortDirection: ModelSortDirection
 ) {
-  listConnectionRequests(
+  listConnectionReceiveds(
     filter: $filter
-    id: $id
     limit: $limit
     nextToken: $nextToken
+    receiverId: $receiverId
+    senderId: $senderId
     sortDirection: $sortDirection
   ) {
     items {
       createdAt
-      id
+      receiverId
+      senderId
+      status
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListConnectionReceivedsQueryVariables,
+  APITypes.ListConnectionReceivedsQuery
+>;
+export const listConnectionRequests = /* GraphQL */ `query ListConnectionRequests(
+  $filter: ModelConnectionRequestFilterInput
+  $limit: Int
+  $nextToken: String
+  $receiverId: ModelIDKeyConditionInput
+  $senderId: ID
+  $sortDirection: ModelSortDirection
+) {
+  listConnectionRequests(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    receiverId: $receiverId
+    senderId: $senderId
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      receiverId
       senderId
       status
       updatedAt
@@ -303,6 +384,35 @@ export const listMessages = /* GraphQL */ `query ListMessages(
 ` as GeneratedQuery<
   APITypes.ListMessagesQueryVariables,
   APITypes.ListMessagesQuery
+>;
+export const listRaceLists = /* GraphQL */ `query ListRaceLists(
+  $filter: ModelRaceListFilterInput
+  $id: ID
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listRaceLists(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      id
+      name
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListRaceListsQueryVariables,
+  APITypes.ListRaceListsQuery
 >;
 export const listRoomUsers = /* GraphQL */ `query ListRoomUsers(
   $filter: ModelRoomUserFilterInput

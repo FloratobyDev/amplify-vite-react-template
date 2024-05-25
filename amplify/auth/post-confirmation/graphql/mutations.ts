@@ -41,13 +41,46 @@ export const createConnection = /* GraphQL */ `mutation CreateConnection(
   APITypes.CreateConnectionMutationVariables,
   APITypes.CreateConnectionMutation
 >;
+export const createConnectionReceived = /* GraphQL */ `mutation CreateConnectionReceived(
+  $condition: ModelConnectionReceivedConditionInput
+  $input: CreateConnectionReceivedInput!
+) {
+  createConnectionReceived(condition: $condition, input: $input) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateConnectionReceivedMutationVariables,
+  APITypes.CreateConnectionReceivedMutation
+>;
 export const createConnectionRequest = /* GraphQL */ `mutation CreateConnectionRequest(
   $condition: ModelConnectionRequestConditionInput
   $input: CreateConnectionRequestInput!
 ) {
   createConnectionRequest(condition: $condition, input: $input) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -116,6 +149,22 @@ export const createMessage = /* GraphQL */ `mutation CreateMessage(
 ` as GeneratedMutation<
   APITypes.CreateMessageMutationVariables,
   APITypes.CreateMessageMutation
+>;
+export const createRaceList = /* GraphQL */ `mutation CreateRaceList(
+  $condition: ModelRaceListConditionInput
+  $input: CreateRaceListInput!
+) {
+  createRaceList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateRaceListMutationVariables,
+  APITypes.CreateRaceListMutation
 >;
 export const createRoom = /* GraphQL */ `mutation CreateRoom(
   $condition: ModelRoomConditionInput
@@ -186,6 +235,10 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   createUser(condition: $condition, input: $input) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
@@ -249,13 +302,46 @@ export const deleteConnection = /* GraphQL */ `mutation DeleteConnection(
   APITypes.DeleteConnectionMutationVariables,
   APITypes.DeleteConnectionMutation
 >;
+export const deleteConnectionReceived = /* GraphQL */ `mutation DeleteConnectionReceived(
+  $condition: ModelConnectionReceivedConditionInput
+  $input: DeleteConnectionReceivedInput!
+) {
+  deleteConnectionReceived(condition: $condition, input: $input) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteConnectionReceivedMutationVariables,
+  APITypes.DeleteConnectionReceivedMutation
+>;
 export const deleteConnectionRequest = /* GraphQL */ `mutation DeleteConnectionRequest(
   $condition: ModelConnectionRequestConditionInput
   $input: DeleteConnectionRequestInput!
 ) {
   deleteConnectionRequest(condition: $condition, input: $input) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -324,6 +410,22 @@ export const deleteMessage = /* GraphQL */ `mutation DeleteMessage(
 ` as GeneratedMutation<
   APITypes.DeleteMessageMutationVariables,
   APITypes.DeleteMessageMutation
+>;
+export const deleteRaceList = /* GraphQL */ `mutation DeleteRaceList(
+  $condition: ModelRaceListConditionInput
+  $input: DeleteRaceListInput!
+) {
+  deleteRaceList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteRaceListMutationVariables,
+  APITypes.DeleteRaceListMutation
 >;
 export const deleteRoom = /* GraphQL */ `mutation DeleteRoom(
   $condition: ModelRoomConditionInput
@@ -394,6 +496,10 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   deleteUser(condition: $condition, input: $input) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
@@ -457,13 +563,46 @@ export const updateConnection = /* GraphQL */ `mutation UpdateConnection(
   APITypes.UpdateConnectionMutationVariables,
   APITypes.UpdateConnectionMutation
 >;
+export const updateConnectionReceived = /* GraphQL */ `mutation UpdateConnectionReceived(
+  $condition: ModelConnectionReceivedConditionInput
+  $input: UpdateConnectionReceivedInput!
+) {
+  updateConnectionReceived(condition: $condition, input: $input) {
+    createdAt
+    receiver {
+      aboutMe
+      age
+      createdAt
+      email
+      fullName
+      gender
+      id
+      interests
+      profilePictureUrl
+      race
+      spokenLanguage
+      status
+      updatedAt
+      __typename
+    }
+    receiverId
+    senderId
+    status
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateConnectionReceivedMutationVariables,
+  APITypes.UpdateConnectionReceivedMutation
+>;
 export const updateConnectionRequest = /* GraphQL */ `mutation UpdateConnectionRequest(
   $condition: ModelConnectionRequestConditionInput
   $input: UpdateConnectionRequestInput!
 ) {
   updateConnectionRequest(condition: $condition, input: $input) {
     createdAt
-    id
+    receiverId
     sender {
       aboutMe
       age
@@ -532,6 +671,22 @@ export const updateMessage = /* GraphQL */ `mutation UpdateMessage(
 ` as GeneratedMutation<
   APITypes.UpdateMessageMutationVariables,
   APITypes.UpdateMessageMutation
+>;
+export const updateRaceList = /* GraphQL */ `mutation UpdateRaceList(
+  $condition: ModelRaceListConditionInput
+  $input: UpdateRaceListInput!
+) {
+  updateRaceList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateRaceListMutationVariables,
+  APITypes.UpdateRaceListMutation
 >;
 export const updateRoom = /* GraphQL */ `mutation UpdateRoom(
   $condition: ModelRoomConditionInput
@@ -602,6 +757,10 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   updateUser(condition: $condition, input: $input) {
     aboutMe
     age
+    connectionReceived {
+      nextToken
+      __typename
+    }
     connectionRequests {
       nextToken
       __typename
