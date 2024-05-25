@@ -201,7 +201,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
     const cUpdate = client.models.ConnectionRequest.update({
       senderId: senderId,
       receiverId: userInformation?.id,
-      status: "declined",
+      status: "rejected",
     });
 
     const cDelete = client.models.ConnectionReceived.delete({

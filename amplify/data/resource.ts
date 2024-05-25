@@ -7,18 +7,19 @@ const schema = a
       .model({
         senderId: a.id().required(),
         receiverId: a.id().required(),
-        status: a.string(),
+        status: a.ref("ConnectionStatus").required(),
         sender: a.belongsTo("User", "senderId"),
       })
       .identifier(["senderId", "receiverId"])
       .authorization((allow) => [
         allow.authenticated().to(["read", "create", "delete", "update"]),
       ]),
+    ConnectionStatus: a.enum(["accepted", "pending", "rejected"]),
     ConnectionReceived: a
       .model({
         senderId: a.id().required(),
         receiverId: a.id().required(),
-        status: a.string(),
+        status: a.ref("ConnectionStatus").required(),
         receiver: a.belongsTo("User", "receiverId"),
       })
       .identifier(["senderId", "receiverId"])
@@ -74,7 +75,9 @@ const schema = a
         messages: a.hasMany("Message", "roomId"),
         roomUsers: a.hasMany("RoomUser", "roomId"),
       })
-      .authorization((allow) => [allow.authenticated().to(["read","create","delete"])]),
+      .authorization((allow) => [
+        allow.authenticated().to(["read", "create", "delete"]),
+      ]),
     RoomUser: a
       .model({
         userId: a.id().required(),
@@ -82,7 +85,9 @@ const schema = a
         user: a.belongsTo("User", "userId"),
         room: a.belongsTo("Room", "roomId"),
       })
-      .authorization((allow) => [allow.authenticated().to(["read","create","delete"])]),
+      .authorization((allow) => [
+        allow.authenticated().to(["read", "create", "delete"]),
+      ]),
     RaceList: a
       .model({
         id: a.id().required(),
