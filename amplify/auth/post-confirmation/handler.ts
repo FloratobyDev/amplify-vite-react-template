@@ -1,9 +1,9 @@
 import type { PostConfirmationTriggerHandler } from "aws-lambda";
-import { type Schema } from "../../data/resource";
+import type { Schema } from "../../data/resource";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import { env } from "$amplify/env/post-confirmation";
-import { createUser } from "./graphql/mutations";
+import { createUser } from "../../graphql/mutations";
 
 Amplify.configure(
   {
