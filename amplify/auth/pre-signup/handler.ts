@@ -1,11 +1,5 @@
 import type { PreSignUpTriggerHandler } from "aws-lambda"
 
-function isOlderThan(date: Date, age: number) {
-  const comparison = new Date()
-  comparison.setFullYear(comparison.getFullYear() - age)
-  return date.getTime() > comparison.getTime()
-}
-
 export const handler: PreSignUpTriggerHandler = async (event) => {
   // const birthdate = new Date(1998, 1,1);
 
