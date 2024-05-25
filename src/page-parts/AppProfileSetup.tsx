@@ -8,7 +8,7 @@ import SubTitle from "../components/SubTitle";
 import TextArea from "../components/TextArea";
 import Title from "../components/Title";
 import Cancel01Icon from "../logos/Cancel01Icon";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { useAuth } from "../context/AuthProvider";
@@ -34,9 +34,9 @@ type NewUserType = {
 
 function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
   const { userInformation } = useAuth();
-  const [options, setOptions] = useState<Array<Schema["DropdownList"]["type"]>>(
-    []
-  );
+  // const [options, setOptions] = useState<Array<Schema["DropdownList"]["type"]>>(
+  //   []
+  // );
 
   // useEffect(() => {
   //   async function fetchDropdownList() {

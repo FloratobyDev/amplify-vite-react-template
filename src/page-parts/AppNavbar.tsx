@@ -3,7 +3,6 @@ import Brand from "../components/Brand";
 import Dropdown from "../components/Dropdown";
 import Paragraph from "../components/Paragraph";
 import Search from "../components/Search";
-import ProfileLogo from "../logos/ProfileLogo";
 import { signOut } from "aws-amplify/auth";
 import { useAuth } from "../context/AuthProvider";
 import { getUrl } from "aws-amplify/storage";

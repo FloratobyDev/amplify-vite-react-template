@@ -131,8 +131,7 @@ function MessageInformation({ userId }: Props) {
                 placeholder="Type a message..."
                 onChange={() => {
                   throw new Error("Function not implemented.");
-                }}
-              />
+                } } value={""}              />
               <div className="px-2 border border-secondary rounded-4 flex items-center justify-center">
                 <Navigation03Icon />
               </div>

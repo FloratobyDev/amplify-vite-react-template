@@ -14,7 +14,6 @@ import AppDropdownList from "./page-parts/AppDropdownList";
 import { CategoryListType } from "./types";
 import AppProfileList from "./page-parts/AppProfileList";
 import { ProfileType } from "./types";
-import { Schema } from "../amplify/data/resource";
 import { useClient } from "./hooks/useClient";
 
 type PendingType = {
@@ -75,9 +74,6 @@ function App() {
   // }, []);
   const { userInformation } = useAuth();
   const { client } = useClient();
-  const [dropdownList, setDropdownList] = useState<
-    Array<Schema["DropdownList"]["type"]>
-  >([]);
 
   const [profiles, setProfiles] = useState<ProfileType[]>([]);
 
@@ -182,14 +178,14 @@ function App() {
     age: "",
   });
 
-  const [dropdownOptions, setDropdownOptions] = useState({
+  const [dropdownOptions] = useState({
     country: ["Country 1", "Country 2", "Country 3"],
     age: ["Age 1", "Age 2", "Age 3"],
     interest: ["Interest 1", "Interest 2", "Interest 3"],
     race: ["Race1", "Race2", "Race3"],
   });
 
-  const [activeLabel, setActiveLabel] = useState<string>("Category");
+  // const [activeLabel, setActiveLabel] = useState<string>("Category");
   const labels = [
     "Taiwanse",
     "Japanese",

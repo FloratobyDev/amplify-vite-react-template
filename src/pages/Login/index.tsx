@@ -1,7 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
-import { getCurrentUser, signIn } from "aws-amplify/auth";
-import { type Schema } from "../../../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
+import { FormEvent, useState } from "react";
+import { signIn } from "aws-amplify/auth";
 
 interface SignInFormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -15,7 +13,6 @@ interface SignInForm extends HTMLFormElement {
 type Props = {
   setHasAuthenticated: (value: boolean) => void;
 };
-
 
 function Login({ setHasAuthenticated }: Props) {
   const [email, setEmail] = useState("");

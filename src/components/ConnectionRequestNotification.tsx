@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import Cancel01Icon from "../logos/Cancel01Icon";
 import Tick02Icon from "../logos/Tick02Icon";
 import Paragraph from "./Paragraph";
-import classNames from "classnames";
 import animejs from "animejs";
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 
 function ConnectionRequestNotification({ name, Accept, Decline }: Props) {
   const [hasDecided, setHasDecided] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   function handleAcceptRequest() {
     Accept();
@@ -26,7 +25,7 @@ function ConnectionRequestNotification({ name, Accept, Decline }: Props) {
   }
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (ref.current === null) return;
 
     if (hasDecided) {
       animejs({
@@ -36,7 +35,7 @@ function ConnectionRequestNotification({ name, Accept, Decline }: Props) {
         duration: 100,
         easing: "easeInOutQuad",
         complete: () => {
-          ref.current.style.display = "none";
+          if (ref.current) ref.current.style.display = "none";
         },
       });
     }
