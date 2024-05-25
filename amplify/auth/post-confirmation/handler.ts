@@ -10,8 +10,7 @@ Amplify.configure(
   {
     API: {
       GraphQL: {
-        endpoint:
-          "https://jqifwl4sandbdk2psugdp37y2q.appsync-api.us-east-1.amazonaws.com/graphql",
+        endpoint: env.AMPLIFY_DATA_GRAPHQL_ENDPOINT,
         region: env.AWS_REGION,
         defaultAuthMode: "userPool",
       },

@@ -12,9 +12,12 @@ function MessageManager() {
   function onUserClick(userId: string) {
     return () => {
       if (currentMessagingUsers.includes(userId)) return;
+
+      
       setCurrentMessagingUsers((prev) => {
         return [...prev, userId];
       });
+
     };
   }
 

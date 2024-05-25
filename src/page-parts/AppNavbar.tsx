@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Brand from "../components/Brand";
 import Dropdown from "../components/Dropdown";
 import Paragraph from "../components/Paragraph";
@@ -6,14 +6,30 @@ import Search from "../components/Search";
 import ProfileLogo from "../logos/ProfileLogo";
 import { signOut } from "aws-amplify/auth";
 import { useAuth } from "../context/AuthProvider";
+import { getUrl } from "aws-amplify/storage";
+import NotificationDropdown from "../components/NotificationDropdown";
+import Notification03Icon from "../logos/Notification03Icon";
 
 function AppNavbar() {
   const { setHasAuthenticated, userInformation } = useAuth();
+  const [image, setImage] = useState("");
+
   async function handleSignout() {
-    setHasAuthenticated(false);
     await signOut();
+    setHasAuthenticated(false);
   }
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!userInformation || !userInformation.profilePictureUrl) return;
+
+      const url = await getUrl({
+        path: userInformation?.profilePictureUrl || "",
+      });
+      setImage(url.url.toString());
+    };
+    fetchImage();
+  }, [userInformation]);
 
   const buttons = [
     {
@@ -44,8 +60,18 @@ function AppNavbar() {
             value=""
           />
         </div>
-        <Paragraph bold>{userInformation?.fullName || userInformation?.email || "No name"}</Paragraph>
-        <Dropdown jsxComponent={<ProfileLogo />} values={buttons} />
+        <NotificationDropdown jsxComponent={<Notification03Icon />} />
+        <Dropdown
+          jsxComponent={
+            <div className="h-5 w-5">
+              <img src={image} alt="profile-image object-fill" />
+            </div>
+          }
+          values={buttons}
+        />
+        <Paragraph bold>
+          {userInformation?.fullName || userInformation?.email || "No name"}
+        </Paragraph>
       </div>
     </div>
   );

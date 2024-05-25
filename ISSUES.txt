@@ -9,3 +9,7 @@ Problem 5: Subscribe to ConnectionRequest Event based on userId
       Otherwise, ConnectionRequest gets removed.
 Problem 6: Show friendsList(online?) feed.
 Problem 7: Show users based on filter. Default tbd.
+
+
+Problem 8: Can't seem to use owner as an auth rule. It returns UNAUTHORIZED.
+Problem 9: 

@@ -16,7 +16,6 @@ export const createConnection = /* GraphQL */ `mutation CreateConnection(
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -27,7 +26,6 @@ export const createConnection = /* GraphQL */ `mutation CreateConnection(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -50,7 +48,6 @@ export const createConnectionRequest = /* GraphQL */ `mutation CreateConnectionR
   createConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -60,7 +57,6 @@ export const createConnectionRequest = /* GraphQL */ `mutation CreateConnectionR
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -78,6 +74,23 @@ export const createConnectionRequest = /* GraphQL */ `mutation CreateConnectionR
   APITypes.CreateConnectionRequestMutationVariables,
   APITypes.CreateConnectionRequestMutation
 >;
+export const createDropdownList = /* GraphQL */ `mutation CreateDropdownList(
+  $condition: ModelDropdownListConditionInput
+  $input: CreateDropdownListInput!
+) {
+  createDropdownList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateDropdownListMutationVariables,
+  APITypes.CreateDropdownListMutation
+>;
 export const createMessage = /* GraphQL */ `mutation CreateMessage(
   $condition: ModelMessageConditionInput
   $input: CreateMessageInput!
@@ -86,7 +99,6 @@ export const createMessage = /* GraphQL */ `mutation CreateMessage(
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -152,7 +164,6 @@ export const createRoomUser = /* GraphQL */ `mutation CreateRoomUser(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -189,7 +200,6 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {
@@ -214,7 +224,6 @@ export const deleteConnection = /* GraphQL */ `mutation DeleteConnection(
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -225,7 +234,6 @@ export const deleteConnection = /* GraphQL */ `mutation DeleteConnection(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -248,7 +256,6 @@ export const deleteConnectionRequest = /* GraphQL */ `mutation DeleteConnectionR
   deleteConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -258,7 +265,6 @@ export const deleteConnectionRequest = /* GraphQL */ `mutation DeleteConnectionR
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -276,6 +282,23 @@ export const deleteConnectionRequest = /* GraphQL */ `mutation DeleteConnectionR
   APITypes.DeleteConnectionRequestMutationVariables,
   APITypes.DeleteConnectionRequestMutation
 >;
+export const deleteDropdownList = /* GraphQL */ `mutation DeleteDropdownList(
+  $condition: ModelDropdownListConditionInput
+  $input: DeleteDropdownListInput!
+) {
+  deleteDropdownList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteDropdownListMutationVariables,
+  APITypes.DeleteDropdownListMutation
+>;
 export const deleteMessage = /* GraphQL */ `mutation DeleteMessage(
   $condition: ModelMessageConditionInput
   $input: DeleteMessageInput!
@@ -284,7 +307,6 @@ export const deleteMessage = /* GraphQL */ `mutation DeleteMessage(
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -350,7 +372,6 @@ export const deleteRoomUser = /* GraphQL */ `mutation DeleteRoomUser(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -387,7 +408,6 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {
@@ -412,7 +432,6 @@ export const updateConnection = /* GraphQL */ `mutation UpdateConnection(
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -423,7 +442,6 @@ export const updateConnection = /* GraphQL */ `mutation UpdateConnection(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -446,7 +464,6 @@ export const updateConnectionRequest = /* GraphQL */ `mutation UpdateConnectionR
   updateConnectionRequest(condition: $condition, input: $input) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -456,7 +473,6 @@ export const updateConnectionRequest = /* GraphQL */ `mutation UpdateConnectionR
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -474,6 +490,23 @@ export const updateConnectionRequest = /* GraphQL */ `mutation UpdateConnectionR
   APITypes.UpdateConnectionRequestMutationVariables,
   APITypes.UpdateConnectionRequestMutation
 >;
+export const updateDropdownList = /* GraphQL */ `mutation UpdateDropdownList(
+  $condition: ModelDropdownListConditionInput
+  $input: UpdateDropdownListInput!
+) {
+  updateDropdownList(condition: $condition, input: $input) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateDropdownListMutationVariables,
+  APITypes.UpdateDropdownListMutation
+>;
 export const updateMessage = /* GraphQL */ `mutation UpdateMessage(
   $condition: ModelMessageConditionInput
   $input: UpdateMessageInput!
@@ -482,7 +515,6 @@ export const updateMessage = /* GraphQL */ `mutation UpdateMessage(
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -548,7 +580,6 @@ export const updateRoomUser = /* GraphQL */ `mutation UpdateRoomUser(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -585,7 +616,6 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {

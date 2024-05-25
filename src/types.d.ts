@@ -9,3 +9,12 @@ export type CategoryListType = {
   age: string;
   interest: string;
 }
+
+export type ProfileType = {
+  id: string;
+  connectionStatus?: string;
+  name: string;
+  overallRating: string;
+  shortInfoList: Array<string>;
+  shortDescription: string;
+};

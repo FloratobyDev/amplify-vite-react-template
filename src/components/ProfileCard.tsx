@@ -12,25 +12,30 @@ import Cancel01Icon from "../logos/Cancel01Icon";
 import ProfileLogo from "../logos/ProfileLogo";
 import Pill from "./Pill";
 import FilledStarIcon from "../logos/FilledStarIcon";
+import { ProfileType } from "../types";
+import { useAuth } from "../context/AuthProvider";
+import { useClient } from "../hooks/useClient";
+import { MouseEvent } from "react";
 
 type Props = {
-  connectClick: () => void;
-  name: string;
-  overallRating: string;
-  shortInfoList: Array<string>;
-  shortDescription: string;
+  profile: ProfileType;
 };
 
 function ProfileCard({
-  connectClick,
-  name,
-  overallRating,
-  shortInfoList,
-  shortDescription,
+  profile: {
+    connectionStatus,
+    id,
+    name,
+    overallRating,
+    shortInfoList,
+    shortDescription,
+  },
 }: Props) {
   const shortInfoStringWithCommas = shortInfoList.join(", ");
   const [showModal, setShowModal] = useState(false);
   const [showClose, setShowClose] = useState(false);
+  const { userInformation } = useAuth();
+  const { client } = useClient();
 
   function handleShowClose() {
     setShowClose(true);
@@ -52,6 +57,27 @@ function ProfileCard({
     setShowModal(!showModal);
   }
 
+  async function submitConnectionRequest(e: MouseEvent<HTMLElement>) {
+    e.stopPropagation();
+
+    console.log("Connection Request Submitted", userInformation?.id, id);
+    if (!userInformation?.id || !id) return;
+
+    const requestResponse = await client.models.ConnectionRequest.create({
+      senderId: userInformation.id,
+      receiverId: id,
+      status: "pending",
+    });
+    const receivedResponse = await client.models.ConnectionReceived.create({
+      receiverId: id,
+      senderId: userInformation.id,
+      status: "pending",
+    });
+
+    console.log("Request Response:", requestResponse);
+    console.log("Received Response:", receivedResponse);
+  }
+
   return (
     <>
       <Modal isOpen={showModal}>
@@ -59,9 +85,11 @@ function ProfileCard({
           <div className="flex justify-between items-center gap-y-1 px-5 py-2 border-b border-b-secondary">
             <SubTitle>Profile Information</SubTitle>
             <div className="flex items-center gap-x-2">
-              <Button onClick={() => {}}>
+              <Button onClick={submitConnectionRequest}>
                 <div className="px-4 py-1 bg-secondary rounded-4 hover:scale-[105%] transition-all">
-                  <Paragraph>Connect</Paragraph>
+                  <Paragraph className="capitalize">
+                    {connectionStatus}
+                  </Paragraph>
                 </div>
               </Button>
               <Button onClick={handleModal}>
@@ -214,9 +242,13 @@ function ProfileCard({
         className="cursor-pointer relative"
       >
         <div className="h-32 rounded-4 bg-secondary w-full mb-1.5 gap-y-4 relative">
-          <div className={divClasses} role="button" onClick={connectClick}>
+          <div
+            className={divClasses}
+            role="button"
+            onClick={(e: MouseEvent<HTMLElement>) => submitConnectionRequest(e)}
+          >
             <Link02Icon />
-            <Paragraph>Connect</Paragraph>
+            <Paragraph className="capitalize">{connectionStatus}</Paragraph>
           </div>
         </div>
         <div className="flex flex-col mb-2">

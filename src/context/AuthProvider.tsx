@@ -22,6 +22,7 @@ export const AuthContext = createContext<ValueType | undefined>(undefined);
 
 export default function AuthProvider({ children }: Props) {
   const [hasAuthenticated, setHasAuthenticated] = useState(false);
+  const [hasUserInfo, setHasUserInfo] = useState(false);
   const [userInformation, setUserInformation] = useState<
     Schema["User"]["type"] | undefined
   >(undefined);
@@ -29,28 +30,44 @@ export default function AuthProvider({ children }: Props) {
 
   useEffect(() => {
     async function checkUser() {
-      console.log("checking user");
-      getCurrentUser()
-        .then(async (response) => {
-          console.log("response", response);
+      if (!hasAuthenticated && !hasUserInfo) {
+        getCurrentUser()
+          .then(async (response) => {
+            client.models.User.get({
+              id: response.username,
+            })
+              .then((user) => {
+                setUserInformation(user.data as Schema["User"]["type"]);
+                setHasUserInfo(true);
+                setHasAuthenticated(true);
+              })
+              .catch((error) => {
+                console.log("error", error);
+              });
+          })
+          .catch(() => {
+            setHasAuthenticated(false);
+          });
+      } else if (hasAuthenticated && !hasUserInfo) {
+        getCurrentUser().then(async (response) => {
           client.models.User.get({
             id: response.username,
           })
             .then((user) => {
               setUserInformation(user.data as Schema["User"]["type"]);
+              setHasUserInfo(true);
             })
             .catch((error) => {
               console.log("error", error);
             });
-
-          setHasAuthenticated(true);
-        })
-        .catch(() => {
-          setHasAuthenticated(false);
         });
+      } else if (!hasAuthenticated && hasUserInfo) {
+        setUserInformation(undefined);
+        setHasUserInfo(false);
+      }
     }
     checkUser();
-  }, []);
+  }, [hasAuthenticated, hasUserInfo]);
 
   const value: ValueType = useMemo(
     () => ({ setHasAuthenticated, userInformation }),
@@ -65,7 +82,7 @@ export default function AuthProvider({ children }: Props) {
     "btn-active": signup,
   });
 
-  if (!hasAuthenticated) {
+  if (!hasAuthenticated && !hasUserInfo) {
     return (
       <div
         className="flex items-center justify-center w-full min-h-screen"

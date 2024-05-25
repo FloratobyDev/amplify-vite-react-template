@@ -12,14 +12,25 @@ const schema = a
   .schema({
     ConnectionRequest: a
       .model({
-        id: a.id().required(),
         senderId: a.id().required(),
+        receiverId: a.id().required(),
         status: a.string().required(),
         sender: a.belongsTo("User", "senderId"),
       })
+      .identifier(["senderId", "receiverId"])
       .authorization((allow) => [
-        allow.authenticated().to(["read"]),
-        allow.owner().to(["delete"]),
+        allow.authenticated().to(["read", "create", "delete", "update"]),
+      ]),
+    ConnectionReceived: a
+      .model({
+        senderId: a.id().required(),
+        receiverId: a.id().required(),
+        status: a.string().required(),
+        receiver: a.belongsTo("User", "receiverId"),
+      })
+      .identifier(["senderId", "receiverId"])
+      .authorization((allow) => [
+        allow.authenticated().to(["read", "create", "delete"]),
       ]),
     Connection: a
       .model({
@@ -29,8 +40,7 @@ const schema = a
         user: a.belongsTo("User", "userId"),
       })
       .authorization((allow) => [
-        allow.authenticated().to(["read"]),
-        allow.owner().to(["delete"]),
+        allow.authenticated().to(["read", "delete", "create"]),
       ]),
     Message: a
       .model({
@@ -42,8 +52,7 @@ const schema = a
         room: a.belongsTo("Room", "roomId"),
       })
       .authorization((allow) => [
-        allow.authenticated().to(["read"]),
-        allow.owner().to(["delete"]),
+        allow.authenticated().to(["read", "delete", "create"]),
       ]),
     User: a
       .model({
@@ -60,26 +69,38 @@ const schema = a
         status: a.string().default("offline"),
         connections: a.hasMany("Connection", "userId"),
         connectionRequests: a.hasMany("ConnectionRequest", "senderId"),
+        connectionReceived: a.hasMany("ConnectionReceived", "receiverId"),
         rooms: a.hasMany("RoomUser", "userId"),
       })
       .authorization((allow) => [
-        allow.authenticated().to(["read"]),
-        allow.owner().to(["read", "update", "delete"]),
+        allow.authenticated().to(["read", "update", "delete"]),
       ]),
     Room: a
       .model({
         id: a.id().required(),
-        createdAt: a.datetime().required(),
         messages: a.hasMany("Message", "roomId"),
         roomUsers: a.hasMany("RoomUser", "roomId"),
       })
-      .authorization((allow) => [allow.authenticated().to(["read"])]),
+      .authorization((allow) => [allow.authenticated().to(["read","create","delete"])]),
     RoomUser: a
       .model({
         userId: a.id().required(),
         roomId: a.id().required(),
         user: a.belongsTo("User", "userId"),
         room: a.belongsTo("Room", "roomId"),
+      })
+      .authorization((allow) => [allow.authenticated().to(["read","create","delete"])]),
+    RaceList: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+      })
+      .authorization((allow) => [allow.authenticated().to(["read"])]),
+    DropdownList: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+        options: a.string().array(),
       })
       .authorization((allow) => [allow.authenticated().to(["read"])]),
   })

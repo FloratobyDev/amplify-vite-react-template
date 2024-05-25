@@ -1,16 +1,17 @@
 import { ChangeEvent, useRef, useState } from "react";
 import Paragraph from "./Paragraph";
+type Props = {
+  onUpload: (file: File) => void;
+}
 
-function ImageUploadWCustomDropdown() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+function ImageUploadWCustomDropdown({ onUpload }: Props){
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
-
+      onUpload(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreviewUrl(reader.result as string);

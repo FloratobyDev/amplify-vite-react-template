@@ -8,10 +8,11 @@ import SubTitle from "../components/SubTitle";
 import TextArea from "../components/TextArea";
 import Title from "../components/Title";
 import Cancel01Icon from "../logos/Cancel01Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { useAuth } from "../context/AuthProvider";
+import { uploadData } from "aws-amplify/storage";
 
 const client = generateClient<Schema>();
 
@@ -20,10 +21,41 @@ type Props = {
   setCloseProfile: (value: boolean) => void;
 };
 
+type NewUserType = {
+  fullName: string;
+  age: string;
+  gender: string;
+  race: string;
+  language: string;
+  interest: string;
+  aboutMe: string;
+  file: File | null;
+};
+
 function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
   const { userInformation } = useAuth();
+  const [options, setOptions] = useState<Array<Schema["DropdownList"]["type"]>>(
+    []
+  );
 
-  const [newUserInformation, setNewUserInformation] = useState({
+  // useEffect(() => {
+  //   async function fetchDropdownList() {
+  //     const response = await client.models.DropdownList.list();
+  //     console.log("response", response);
+  //     // if (errors) {
+  //     //   console.error(errors);
+  //     //   return;
+  //     // }
+  //     // if (data) {
+  //     //   console.log("data", data);
+
+  //     //   // setOptions(data);
+  //     // }
+  //   }
+  //   fetchDropdownList();
+  // }, []);
+
+  const [newUserInformation, setNewUserInformation] = useState<NewUserType>({
     fullName: "",
     age: "",
     gender: "",
@@ -31,6 +63,7 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
     language: "",
     interest: "",
     aboutMe: "",
+    file: null,
   });
 
   function handleInformation(key: string) {
@@ -252,26 +285,46 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
       onClick: stopSeeingThis,
     },
   ];
-  console.log(newUserInformation, userInformation);
 
   async function handleSubmit() {
     if (userInformation?.id === undefined) return;
 
-    
-    console.log("userInformation", userInformation);
+    let profilePicturePath = "";
+    if (newUserInformation.file !== null) {
+      const { result } = await uploadData({
+        path: `profile-pictures/${userInformation?.id}/${newUserInformation.file?.name}`,
+        data: newUserInformation?.file,
+      });
+
+      try {
+        const results = await result;
+        console.log("results", results);
+        profilePicturePath = results.path;
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+
     client.models.User.update(
       {
         id: userInformation.id,
-        fullName: newUserInformation.fullName,
+        profilePictureUrl: profilePicturePath,
       },
+      {
+        authMode: "userPool",
+      }
     )
       .then((response) => {
         console.log("User updated successfully", response);
-        localStorage.setItem("closeProfile", "true");
+        // localStorage.setItem("closeProfile", "true");
       })
       .catch((error) => {
         console.log("Error updating user", error);
       });
+  }
+
+  function handleFileUpload(file: File) {
+    setNewUserInformation({ ...newUserInformation, file: file });
   }
 
   return (
@@ -294,7 +347,7 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
               <SubTitle>Profile Picture</SubTitle>
               <Paragraph>We only support PNGs and JPEGs.</Paragraph>
             </div>
-            <ImageUploadWCustomDropdown />
+            <ImageUploadWCustomDropdown onUpload={handleFileUpload} />
           </div>
           <div className="flex flex-col gap-y-4">
             <div>

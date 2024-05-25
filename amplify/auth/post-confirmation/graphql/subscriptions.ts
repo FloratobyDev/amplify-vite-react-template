@@ -15,7 +15,6 @@ export const onCreateConnection = /* GraphQL */ `subscription OnCreateConnection
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -26,7 +25,6 @@ export const onCreateConnection = /* GraphQL */ `subscription OnCreateConnection
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -48,7 +46,6 @@ export const onCreateConnectionRequest = /* GraphQL */ `subscription OnCreateCon
   onCreateConnectionRequest(filter: $filter) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -58,7 +55,6 @@ export const onCreateConnectionRequest = /* GraphQL */ `subscription OnCreateCon
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -76,12 +72,27 @@ export const onCreateConnectionRequest = /* GraphQL */ `subscription OnCreateCon
   APITypes.OnCreateConnectionRequestSubscriptionVariables,
   APITypes.OnCreateConnectionRequestSubscription
 >;
+export const onCreateDropdownList = /* GraphQL */ `subscription OnCreateDropdownList(
+  $filter: ModelSubscriptionDropdownListFilterInput
+) {
+  onCreateDropdownList(filter: $filter) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateDropdownListSubscriptionVariables,
+  APITypes.OnCreateDropdownListSubscription
+>;
 export const onCreateMessage = /* GraphQL */ `subscription OnCreateMessage($filter: ModelSubscriptionMessageFilterInput) {
   onCreateMessage(filter: $filter) {
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -141,7 +152,6 @@ export const onCreateRoomUser = /* GraphQL */ `subscription OnCreateRoomUser($fi
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -175,7 +185,6 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {
@@ -199,7 +208,6 @@ export const onDeleteConnection = /* GraphQL */ `subscription OnDeleteConnection
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -210,7 +218,6 @@ export const onDeleteConnection = /* GraphQL */ `subscription OnDeleteConnection
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -232,7 +239,6 @@ export const onDeleteConnectionRequest = /* GraphQL */ `subscription OnDeleteCon
   onDeleteConnectionRequest(filter: $filter) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -242,7 +248,6 @@ export const onDeleteConnectionRequest = /* GraphQL */ `subscription OnDeleteCon
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -260,12 +265,27 @@ export const onDeleteConnectionRequest = /* GraphQL */ `subscription OnDeleteCon
   APITypes.OnDeleteConnectionRequestSubscriptionVariables,
   APITypes.OnDeleteConnectionRequestSubscription
 >;
+export const onDeleteDropdownList = /* GraphQL */ `subscription OnDeleteDropdownList(
+  $filter: ModelSubscriptionDropdownListFilterInput
+) {
+  onDeleteDropdownList(filter: $filter) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteDropdownListSubscriptionVariables,
+  APITypes.OnDeleteDropdownListSubscription
+>;
 export const onDeleteMessage = /* GraphQL */ `subscription OnDeleteMessage($filter: ModelSubscriptionMessageFilterInput) {
   onDeleteMessage(filter: $filter) {
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -325,7 +345,6 @@ export const onDeleteRoomUser = /* GraphQL */ `subscription OnDeleteRoomUser($fi
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -359,7 +378,6 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {
@@ -383,7 +401,6 @@ export const onUpdateConnection = /* GraphQL */ `subscription OnUpdateConnection
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -394,7 +411,6 @@ export const onUpdateConnection = /* GraphQL */ `subscription OnUpdateConnection
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -416,7 +432,6 @@ export const onUpdateConnectionRequest = /* GraphQL */ `subscription OnUpdateCon
   onUpdateConnectionRequest(filter: $filter) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -426,7 +441,6 @@ export const onUpdateConnectionRequest = /* GraphQL */ `subscription OnUpdateCon
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -444,12 +458,27 @@ export const onUpdateConnectionRequest = /* GraphQL */ `subscription OnUpdateCon
   APITypes.OnUpdateConnectionRequestSubscriptionVariables,
   APITypes.OnUpdateConnectionRequestSubscription
 >;
+export const onUpdateDropdownList = /* GraphQL */ `subscription OnUpdateDropdownList(
+  $filter: ModelSubscriptionDropdownListFilterInput
+) {
+  onUpdateDropdownList(filter: $filter) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateDropdownListSubscriptionVariables,
+  APITypes.OnUpdateDropdownListSubscription
+>;
 export const onUpdateMessage = /* GraphQL */ `subscription OnUpdateMessage($filter: ModelSubscriptionMessageFilterInput) {
   onUpdateMessage(filter: $filter) {
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -509,7 +538,6 @@ export const onUpdateRoomUser = /* GraphQL */ `subscription OnUpdateRoomUser($fi
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -543,7 +571,6 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {

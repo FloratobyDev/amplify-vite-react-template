@@ -7,7 +7,6 @@ export type Connection = {
   connectionId: string,
   createdAt: string,
   id: string,
-  owner?: string | null,
   updatedAt: string,
   user?: User | null,
   userId: string,
@@ -25,7 +24,6 @@ export type User = {
   gender?: string | null,
   id: string,
   interests?: Array< string | null > | null,
-  owner?: string | null,
   profilePictureUrl?: string | null,
   race?: string | null,
   rooms?: ModelRoomUserConnection | null,
@@ -44,7 +42,6 @@ export type ConnectionRequest = {
   __typename: "ConnectionRequest",
   createdAt: string,
   id: string,
-  owner?: string | null,
   sender?: User | null,
   senderId: string,
   status: string,
@@ -94,12 +91,20 @@ export type Message = {
   content?: string | null,
   createdAt: string,
   id: string,
-  owner?: string | null,
   room?: Room | null,
   roomId: string,
   senderId: string,
   timestamp: string,
   translatedContent?: string | null,
+  updatedAt: string,
+};
+
+export type DropdownList = {
+  __typename: "DropdownList",
+  createdAt: string,
+  id: string,
+  name: string,
+  options?: Array< string | null > | null,
   updatedAt: string,
 };
 
@@ -109,7 +114,6 @@ export type ModelConnectionRequestFilterInput = {
   id?: ModelIDInput | null,
   not?: ModelConnectionRequestFilterInput | null,
   or?: Array< ModelConnectionRequestFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   senderId?: ModelIDInput | null,
   status?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -184,9 +188,25 @@ export type ModelConnectionFilterInput = {
   id?: ModelIDInput | null,
   not?: ModelConnectionFilterInput | null,
   or?: Array< ModelConnectionFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   userId?: ModelIDInput | null,
+};
+
+export type ModelDropdownListFilterInput = {
+  and?: Array< ModelDropdownListFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelDropdownListFilterInput | null,
+  options?: ModelStringInput | null,
+  or?: Array< ModelDropdownListFilterInput | null > | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelDropdownListConnection = {
+  __typename: "ModelDropdownListConnection",
+  items:  Array<DropdownList | null >,
+  nextToken?: string | null,
 };
 
 export type ModelMessageFilterInput = {
@@ -196,7 +216,6 @@ export type ModelMessageFilterInput = {
   id?: ModelIDInput | null,
   not?: ModelMessageFilterInput | null,
   or?: Array< ModelMessageFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   roomId?: ModelIDInput | null,
   senderId?: ModelIDInput | null,
   timestamp?: ModelStringInput | null,
@@ -242,7 +261,6 @@ export type ModelUserFilterInput = {
   interests?: ModelStringInput | null,
   not?: ModelUserFilterInput | null,
   or?: Array< ModelUserFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   profilePictureUrl?: ModelStringInput | null,
   race?: ModelStringInput | null,
   spokenLanguage?: ModelStringInput | null,
@@ -274,7 +292,6 @@ export type ModelConnectionConditionInput = {
   createdAt?: ModelStringInput | null,
   not?: ModelConnectionConditionInput | null,
   or?: Array< ModelConnectionConditionInput | null > | null,
-  owner?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   userId?: ModelIDInput | null,
 };
@@ -290,7 +307,6 @@ export type ModelConnectionRequestConditionInput = {
   createdAt?: ModelStringInput | null,
   not?: ModelConnectionRequestConditionInput | null,
   or?: Array< ModelConnectionRequestConditionInput | null > | null,
-  owner?: ModelStringInput | null,
   senderId?: ModelIDInput | null,
   status?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -302,13 +318,28 @@ export type CreateConnectionRequestInput = {
   status: string,
 };
 
+export type ModelDropdownListConditionInput = {
+  and?: Array< ModelDropdownListConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelDropdownListConditionInput | null,
+  options?: ModelStringInput | null,
+  or?: Array< ModelDropdownListConditionInput | null > | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateDropdownListInput = {
+  id?: string | null,
+  name: string,
+  options?: Array< string | null > | null,
+};
+
 export type ModelMessageConditionInput = {
   and?: Array< ModelMessageConditionInput | null > | null,
   content?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   not?: ModelMessageConditionInput | null,
   or?: Array< ModelMessageConditionInput | null > | null,
-  owner?: ModelStringInput | null,
   roomId?: ModelIDInput | null,
   senderId?: ModelIDInput | null,
   timestamp?: ModelStringInput | null,
@@ -365,7 +396,6 @@ export type ModelUserConditionInput = {
   interests?: ModelStringInput | null,
   not?: ModelUserConditionInput | null,
   or?: Array< ModelUserConditionInput | null > | null,
-  owner?: ModelStringInput | null,
   profilePictureUrl?: ModelStringInput | null,
   race?: ModelStringInput | null,
   spokenLanguage?: ModelStringInput | null,
@@ -395,6 +425,10 @@ export type DeleteConnectionRequestInput = {
   id: string,
 };
 
+export type DeleteDropdownListInput = {
+  id: string,
+};
+
 export type DeleteMessageInput = {
   id: string,
 };
@@ -421,6 +455,12 @@ export type UpdateConnectionRequestInput = {
   id: string,
   senderId?: string | null,
   status?: string | null,
+};
+
+export type UpdateDropdownListInput = {
+  id: string,
+  name?: string | null,
+  options?: Array< string | null > | null,
 };
 
 export type UpdateMessageInput = {
@@ -463,7 +503,6 @@ export type ModelSubscriptionConnectionFilterInput = {
   createdAt?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   or?: Array< ModelSubscriptionConnectionFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   userId?: ModelSubscriptionIDInput | null,
 };
@@ -503,9 +542,18 @@ export type ModelSubscriptionConnectionRequestFilterInput = {
   createdAt?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   or?: Array< ModelSubscriptionConnectionRequestFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   senderId?: ModelSubscriptionIDInput | null,
   status?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionDropdownListFilterInput = {
+  and?: Array< ModelSubscriptionDropdownListFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  options?: ModelSubscriptionStringInput | null,
+  or?: Array< ModelSubscriptionDropdownListFilterInput | null > | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
@@ -515,7 +563,6 @@ export type ModelSubscriptionMessageFilterInput = {
   createdAt?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   or?: Array< ModelSubscriptionMessageFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   roomId?: ModelSubscriptionIDInput | null,
   senderId?: ModelSubscriptionIDInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
@@ -552,7 +599,6 @@ export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   interests?: ModelSubscriptionStringInput | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  owner?: ModelStringInput | null,
   profilePictureUrl?: ModelSubscriptionStringInput | null,
   race?: ModelSubscriptionStringInput | null,
   spokenLanguage?: ModelSubscriptionStringInput | null,
@@ -582,7 +628,6 @@ export type GetConnectionQuery = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -594,7 +639,6 @@ export type GetConnectionQuery = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -614,7 +658,6 @@ export type GetConnectionRequestQuery = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -625,7 +668,6 @@ export type GetConnectionRequestQuery = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -634,6 +676,21 @@ export type GetConnectionRequestQuery = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetDropdownListQueryVariables = {
+  id: string,
+};
+
+export type GetDropdownListQuery = {
+  getDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -648,7 +705,6 @@ export type GetMessageQuery = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -711,7 +767,6 @@ export type GetRoomUserQuery = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -745,7 +800,6 @@ export type GetUserQuery = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -773,7 +827,6 @@ export type ListConnectionRequestsQuery = {
       __typename: "ConnectionRequest",
       createdAt: string,
       id: string,
-      owner?: string | null,
       senderId: string,
       status: string,
       updatedAt: string,
@@ -798,9 +851,31 @@ export type ListConnectionsQuery = {
       connectionId: string,
       createdAt: string,
       id: string,
-      owner?: string | null,
       updatedAt: string,
       userId: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListDropdownListsQueryVariables = {
+  filter?: ModelDropdownListFilterInput | null,
+  id?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListDropdownListsQuery = {
+  listDropdownLists?:  {
+    __typename: "ModelDropdownListConnection",
+    items:  Array< {
+      __typename: "DropdownList",
+      createdAt: string,
+      id: string,
+      name: string,
+      options?: Array< string | null > | null,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -820,7 +895,6 @@ export type ListMessagesQuery = {
       content?: string | null,
       createdAt: string,
       id: string,
-      owner?: string | null,
       roomId: string,
       senderId: string,
       timestamp: string,
@@ -894,7 +968,6 @@ export type ListUsersQuery = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -916,7 +989,6 @@ export type CreateConnectionMutation = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -928,7 +1000,6 @@ export type CreateConnectionMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -949,7 +1020,6 @@ export type CreateConnectionRequestMutation = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -960,7 +1030,6 @@ export type CreateConnectionRequestMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -969,6 +1038,22 @@ export type CreateConnectionRequestMutation = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateDropdownListMutationVariables = {
+  condition?: ModelDropdownListConditionInput | null,
+  input: CreateDropdownListInput,
+};
+
+export type CreateDropdownListMutation = {
+  createDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -984,7 +1069,6 @@ export type CreateMessageMutation = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1049,7 +1133,6 @@ export type CreateRoomUserMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1084,7 +1167,6 @@ export type CreateUserMutation = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -1108,7 +1190,6 @@ export type DeleteConnectionMutation = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1120,7 +1201,6 @@ export type DeleteConnectionMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1141,7 +1221,6 @@ export type DeleteConnectionRequestMutation = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1152,7 +1231,6 @@ export type DeleteConnectionRequestMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1161,6 +1239,22 @@ export type DeleteConnectionRequestMutation = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteDropdownListMutationVariables = {
+  condition?: ModelDropdownListConditionInput | null,
+  input: DeleteDropdownListInput,
+};
+
+export type DeleteDropdownListMutation = {
+  deleteDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -1176,7 +1270,6 @@ export type DeleteMessageMutation = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1241,7 +1334,6 @@ export type DeleteRoomUserMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1276,7 +1368,6 @@ export type DeleteUserMutation = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -1300,7 +1391,6 @@ export type UpdateConnectionMutation = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1312,7 +1402,6 @@ export type UpdateConnectionMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1333,7 +1422,6 @@ export type UpdateConnectionRequestMutation = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1344,7 +1432,6 @@ export type UpdateConnectionRequestMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1353,6 +1440,22 @@ export type UpdateConnectionRequestMutation = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateDropdownListMutationVariables = {
+  condition?: ModelDropdownListConditionInput | null,
+  input: UpdateDropdownListInput,
+};
+
+export type UpdateDropdownListMutation = {
+  updateDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -1368,7 +1471,6 @@ export type UpdateMessageMutation = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1433,7 +1535,6 @@ export type UpdateRoomUserMutation = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1468,7 +1569,6 @@ export type UpdateUserMutation = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -1491,7 +1591,6 @@ export type OnCreateConnectionSubscription = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1503,7 +1602,6 @@ export type OnCreateConnectionSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1523,7 +1621,6 @@ export type OnCreateConnectionRequestSubscription = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1534,7 +1631,6 @@ export type OnCreateConnectionRequestSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1543,6 +1639,21 @@ export type OnCreateConnectionRequestSubscription = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateDropdownListSubscriptionVariables = {
+  filter?: ModelSubscriptionDropdownListFilterInput | null,
+};
+
+export type OnCreateDropdownListSubscription = {
+  onCreateDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -1557,7 +1668,6 @@ export type OnCreateMessageSubscription = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1620,7 +1730,6 @@ export type OnCreateRoomUserSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1654,7 +1763,6 @@ export type OnCreateUserSubscription = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -1677,7 +1785,6 @@ export type OnDeleteConnectionSubscription = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1689,7 +1796,6 @@ export type OnDeleteConnectionSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1709,7 +1815,6 @@ export type OnDeleteConnectionRequestSubscription = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1720,7 +1825,6 @@ export type OnDeleteConnectionRequestSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1729,6 +1833,21 @@ export type OnDeleteConnectionRequestSubscription = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteDropdownListSubscriptionVariables = {
+  filter?: ModelSubscriptionDropdownListFilterInput | null,
+};
+
+export type OnDeleteDropdownListSubscription = {
+  onDeleteDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -1743,7 +1862,6 @@ export type OnDeleteMessageSubscription = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1806,7 +1924,6 @@ export type OnDeleteRoomUserSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1840,7 +1957,6 @@ export type OnDeleteUserSubscription = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {
@@ -1863,7 +1979,6 @@ export type OnUpdateConnectionSubscription = {
     connectionId: string,
     createdAt: string,
     id: string,
-    owner?: string | null,
     updatedAt: string,
     user?:  {
       __typename: "User",
@@ -1875,7 +1990,6 @@ export type OnUpdateConnectionSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1895,7 +2009,6 @@ export type OnUpdateConnectionRequestSubscription = {
     __typename: "ConnectionRequest",
     createdAt: string,
     id: string,
-    owner?: string | null,
     sender?:  {
       __typename: "User",
       aboutMe?: string | null,
@@ -1906,7 +2019,6 @@ export type OnUpdateConnectionRequestSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -1915,6 +2027,21 @@ export type OnUpdateConnectionRequestSubscription = {
     } | null,
     senderId: string,
     status: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateDropdownListSubscriptionVariables = {
+  filter?: ModelSubscriptionDropdownListFilterInput | null,
+};
+
+export type OnUpdateDropdownListSubscription = {
+  onUpdateDropdownList?:  {
+    __typename: "DropdownList",
+    createdAt: string,
+    id: string,
+    name: string,
+    options?: Array< string | null > | null,
     updatedAt: string,
   } | null,
 };
@@ -1929,7 +2056,6 @@ export type OnUpdateMessageSubscription = {
     content?: string | null,
     createdAt: string,
     id: string,
-    owner?: string | null,
     room?:  {
       __typename: "Room",
       createdAt: string,
@@ -1992,7 +2118,6 @@ export type OnUpdateRoomUserSubscription = {
       gender?: string | null,
       id: string,
       interests?: Array< string | null > | null,
-      owner?: string | null,
       profilePictureUrl?: string | null,
       race?: string | null,
       spokenLanguage?: string | null,
@@ -2026,7 +2151,6 @@ export type OnUpdateUserSubscription = {
     gender?: string | null,
     id: string,
     interests?: Array< string | null > | null,
-    owner?: string | null,
     profilePictureUrl?: string | null,
     race?: string | null,
     rooms?:  {

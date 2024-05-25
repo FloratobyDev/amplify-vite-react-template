@@ -13,7 +13,6 @@ export const getConnection = /* GraphQL */ `query GetConnection($id: ID!) {
     connectionId
     createdAt
     id
-    owner
     updatedAt
     user {
       aboutMe
@@ -24,7 +23,6 @@ export const getConnection = /* GraphQL */ `query GetConnection($id: ID!) {
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -44,7 +42,6 @@ export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($i
   getConnectionRequest(id: $id) {
     createdAt
     id
-    owner
     sender {
       aboutMe
       age
@@ -54,7 +51,6 @@ export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($i
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -72,12 +68,25 @@ export const getConnectionRequest = /* GraphQL */ `query GetConnectionRequest($i
   APITypes.GetConnectionRequestQueryVariables,
   APITypes.GetConnectionRequestQuery
 >;
+export const getDropdownList = /* GraphQL */ `query GetDropdownList($id: ID!) {
+  getDropdownList(id: $id) {
+    createdAt
+    id
+    name
+    options
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetDropdownListQueryVariables,
+  APITypes.GetDropdownListQuery
+>;
 export const getMessage = /* GraphQL */ `query GetMessage($id: ID!) {
   getMessage(id: $id) {
     content
     createdAt
     id
-    owner
     room {
       createdAt
       id
@@ -134,7 +143,6 @@ export const getRoomUser = /* GraphQL */ `query GetRoomUser($id: ID!) {
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
@@ -168,7 +176,6 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     gender
     id
     interests
-    owner
     profilePictureUrl
     race
     rooms {
@@ -199,7 +206,6 @@ export const listConnectionRequests = /* GraphQL */ `query ListConnectionRequest
     items {
       createdAt
       id
-      owner
       senderId
       status
       updatedAt
@@ -231,7 +237,6 @@ export const listConnections = /* GraphQL */ `query ListConnections(
       connectionId
       createdAt
       id
-      owner
       updatedAt
       userId
       __typename
@@ -244,6 +249,36 @@ export const listConnections = /* GraphQL */ `query ListConnections(
   APITypes.ListConnectionsQueryVariables,
   APITypes.ListConnectionsQuery
 >;
+export const listDropdownLists = /* GraphQL */ `query ListDropdownLists(
+  $filter: ModelDropdownListFilterInput
+  $id: ID
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listDropdownLists(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      id
+      name
+      options
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListDropdownListsQueryVariables,
+  APITypes.ListDropdownListsQuery
+>;
 export const listMessages = /* GraphQL */ `query ListMessages(
   $filter: ModelMessageFilterInput
   $limit: Int
@@ -254,7 +289,6 @@ export const listMessages = /* GraphQL */ `query ListMessages(
       content
       createdAt
       id
-      owner
       roomId
       senderId
       timestamp
@@ -340,7 +374,6 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       gender
       id
       interests
-      owner
       profilePictureUrl
       race
       spokenLanguage
