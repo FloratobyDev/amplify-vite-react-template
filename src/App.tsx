@@ -2,7 +2,6 @@ import { useAuth } from "./context/AuthProvider";
 import { useEffect, useState } from "react";
 import Paragraph from "./components/Paragraph";
 import MessageManager from "./components/MessageManager";
-import MessageProvider from "./context/MessageProvider";
 import CurrentMessageUsers from "./components/Message";
 import Button from "./components/Button";
 import Title from "./components/Title";
@@ -76,8 +75,11 @@ function App() {
   const { client } = useClient();
 
   const [profiles, setProfiles] = useState<ProfileType[]>([]);
+  const [loadMore, setLoadMore] = useState<boolean>(true);
 
   useEffect(() => {
+    if (!loadMore) return;
+
     async function fetchConnectionRequests(receiverId: string) {
       return await new Promise((resolve) => {
         userInformation?.connectionRequests().then((connectionResponse) => {
@@ -124,7 +126,10 @@ function App() {
         console.log("connections", connections);
 
         const filteredConnections = users.data.filter(
-          (e) => !connections?.data.some((c) => c.connectionId === e.id)
+          (e) =>
+            !connections?.data.some(
+              (c) => c.connectionId === e.id || userInformation?.id === e.id
+            )
         );
 
         const userWithPendingStatus = filteredConnections.map((e) =>
@@ -158,7 +163,7 @@ function App() {
             shortDescription,
           });
         });
-
+        setLoadMore(false);
         setProfiles((prev) => [...prev, ...newProfiles]);
       })
       .catch((error) => {
@@ -167,6 +172,7 @@ function App() {
   }, [
     client.models.ConnectionRequest,
     client.models.User,
+    loadMore,
     userInformation,
     userInformation?.id,
   ]);
@@ -252,10 +258,12 @@ function App() {
           </div>
         </div>
       </div>
-      <MessageProvider>
-        <CurrentMessageUsers />
-        <MessageManager />
-      </MessageProvider>
+      <div className="fixed bottom-0 right-0 mr-9 mb-9">
+        <div className="flex flex-col gap-y-2">
+          <CurrentMessageUsers />
+          <MessageManager />
+        </div>
+      </div>
     </div>
   );
 }

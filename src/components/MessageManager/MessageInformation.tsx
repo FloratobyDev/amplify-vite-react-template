@@ -11,7 +11,7 @@ import { useClient } from "../../hooks/useClient";
 import { useAuth } from "../../context/AuthProvider";
 
 type Props = {
-  onUserClick: (userId: string) => () => void;
+  onUserClick: (userInfo: Schema["User"]["type"]) => () => void;
   onClose: () => void;
 };
 
@@ -84,7 +84,7 @@ function MessageInformation({ onUserClick, onClose }: Props) {
           <Italic>Online</Italic>
           <div className="grid grid-cols-8  gap-y-2">
             {connections.map((connection) => (
-              <UserBubble onUserClick={onUserClick} userInfo={connection} />
+              <UserBubble key={connection.id} onUserClick={onUserClick} userInfo={connection} />
             ))}
             {/* <UserBubble onUserClick={onUserClick} userId="1" />
             <UserBubble onUserClick={onUserClick} userId="2" />

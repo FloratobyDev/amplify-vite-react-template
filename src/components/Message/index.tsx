@@ -4,11 +4,12 @@ import { useMessage } from "../../context/MessageProvider";
 function CurrentMessageUsers() {
   const { currentMessagingUsers } = useMessage();
 
-
+  
+  
   return (
     <>
-      {currentMessagingUsers.map((userId) => {
-        return <MessageInformation key={userId} userId={userId} />;
+      {currentMessagingUsers.map((userInfo, idx) => {
+        return <MessageInformation key={idx} userInfo={userInfo} />;
       })}
     </>
   );

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import MessageInformation from "./MessageInformation";
 import useOutsideClick from "../../hooks/useClickOutside";
 import { useMessage } from "../../context/MessageProvider";
+import { Schema } from "../../../amplify/data/resource";
 
 function MessageManager() {
   const [show, setShow] = useState(false);
@@ -9,15 +10,12 @@ function MessageManager() {
 
   const { currentMessagingUsers, setCurrentMessagingUsers } = useMessage();
 
-  function onUserClick(userId: string) {
+  function onUserClick(userInfo: Schema["User"]["type"]) {
     return () => {
-      if (currentMessagingUsers.includes(userId)) return;
-
-      
+      if (currentMessagingUsers.some((user) => user.id === userInfo.id)) return;
       setCurrentMessagingUsers((prev) => {
-        return [...prev, userId];
+        return [...prev, userInfo];
       });
-
     };
   }
 

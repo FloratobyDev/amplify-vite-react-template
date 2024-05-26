@@ -69,8 +69,8 @@ function Login({ setHasAuthenticated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form-control gap-y-3">
-      <label className="input input-bordered flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-1">
+      <label className="flex items-center gap-2 border border-secondary rounded-4 p-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
@@ -82,13 +82,13 @@ function Login({ setHasAuthenticated }: Props) {
         </svg>
         <input
           type="text"
-          className="grow"
+          className="outline-none bg-transparent"
           placeholder="Email"
           value={email}
           onChange={handleChange(setEmail)}
         />
       </label>
-      <label className="input input-bordered flex items-center gap-2">
+      <label className="flex items-center gap-2 border border-secondary rounded-4 p-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"

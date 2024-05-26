@@ -1,7 +1,7 @@
 import { Schema } from "../../../amplify/data/resource";
 
 type Props = {
-  onUserClick: (userId: string) => () => void;
+  onUserClick: (value: Schema["User"]["type"]) => () => void;
   userInfo: Schema["User"]["type"];
 };
 
@@ -10,7 +10,7 @@ function UserBubble({ onUserClick, userInfo }: Props) {
 
   return (
     <div
-      onClick={onUserClick(userInfo.fullName || "No Name")}
+      onClick={onUserClick(userInfo)}
       className="w-8 h-8 bg-secondary rounded-full cursor-pointer"
     >
       <img

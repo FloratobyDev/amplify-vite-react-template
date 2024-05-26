@@ -8,11 +8,14 @@ import {
   useMemo,
   useState,
 } from "react";
+import { Schema } from "../../amplify/data/resource";
 
 type MessageProps = {
-  currentMessagingUsers: string[];
-  setCurrentMessagingUsers: Dispatch<SetStateAction<string[]>>;
-  onUserClick: (userId: string) => () => void;
+  currentMessagingUsers: Schema["User"]["type"][];
+  setCurrentMessagingUsers: Dispatch<
+    SetStateAction<Array<Schema["User"]["type"]>>
+  >;
+  onUserClick: (userInfo: Schema["User"]["type"]) => () => void;
 };
 
 type Props = {
@@ -24,14 +27,14 @@ export const MessageContext = createContext<MessageProps | undefined>(
 );
 
 function MessageProvider({ children }: Props) {
-  const [currentMessagingUsers, setCurrentMessagingUsers] = useState<string[]>(
-    []
-  );
+  const [currentMessagingUsers, setCurrentMessagingUsers] = useState<
+    Schema["User"]["type"][]
+  >([]);
 
   const onUserClick = useCallback(
-    (userId: string) => {
+    (userId: Schema["User"]["type"]) => {
       return () => {
-        if (currentMessagingUsers.includes(userId)) return;
+        if (currentMessagingUsers.some((user) => user.id === userId.id)) return;
         setCurrentMessagingUsers((prev) => {
           return [...prev, userId];
         });
@@ -46,11 +49,7 @@ function MessageProvider({ children }: Props) {
   );
 
   return (
-    <MessageContext.Provider value={value}>
-      <div className="fixed bottom-0 right-0 mr-9 mb-9">
-        <div className="flex flex-col gap-y-2">{children}</div>
-      </div>
-    </MessageContext.Provider>
+    <MessageContext.Provider value={value}>{children}</MessageContext.Provider>
   );
 }
 

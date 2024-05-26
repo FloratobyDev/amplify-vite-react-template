@@ -39,8 +39,7 @@ const schema = a
     Message: a
       .model({
         roomId: a.id().required(),
-        content: a.string().default(""),
-        timestamp: a.string().required(),
+        content: a.string().required(),
         senderId: a.id().required(),
         translatedContent: a.string().default(""),
         room: a.belongsTo("Room", "roomId"),

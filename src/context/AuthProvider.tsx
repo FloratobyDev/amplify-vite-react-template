@@ -3,9 +3,9 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { getCurrentUser } from "aws-amplify/auth";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
-import classNames from "classnames";
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "../../amplify/data/resource";
+import SegmentedControl from "../components/SegmentedControl";
 
 type Props = {
   children: React.ReactNode;
@@ -16,6 +16,7 @@ const client = generateClient<Schema>();
 type ValueType = {
   setHasAuthenticated: (value: boolean) => void;
   userInformation: Schema["User"]["type"] | undefined;
+  setUserInformation: (value: Schema["User"]["type"] | undefined) => void;
 };
 
 export const AuthContext = createContext<ValueType | undefined>(undefined);
@@ -28,11 +29,10 @@ export default function AuthProvider({ children }: Props) {
   >(undefined);
   const [signup, setSignup] = useState(false);
 
-  console.log("userInformation", userInformation);
-
   useEffect(() => {
     async function checkUser() {
       if (!hasAuthenticated && !hasUserInfo) {
+        console.log("getting current user");
         getCurrentUser()
           .then(async (response) => {
             client.models.User.get({
@@ -51,6 +51,7 @@ export default function AuthProvider({ children }: Props) {
             setHasAuthenticated(false);
           });
       } else if (hasAuthenticated && !hasUserInfo) {
+        console.log("getting user info");
         getCurrentUser().then(async (response) => {
           client.models.User.get({
             id: response.username,
@@ -64,6 +65,7 @@ export default function AuthProvider({ children }: Props) {
             });
         });
       } else if (!hasAuthenticated && hasUserInfo) {
+        console.log("clearing user info");
         setUserInformation(undefined);
         setHasUserInfo(false);
       }
@@ -72,43 +74,28 @@ export default function AuthProvider({ children }: Props) {
   }, [hasAuthenticated, hasUserInfo]);
 
   const value: ValueType = useMemo(
-    () => ({ setHasAuthenticated, userInformation }),
+    () => ({ setHasAuthenticated, userInformation, setUserInformation }),
     [setHasAuthenticated, userInformation]
   );
 
-  const loginClasses = classNames("btn join-item flex-1", {
-    "btn-active": !signup,
-  });
-
-  const signupClasses = classNames("btn join-item flex-1", {
-    "btn-active": signup,
-  });
-
   if (!hasAuthenticated && !hasUserInfo) {
     return (
-      <div
-        className="flex items-center justify-center w-full min-h-screen"
-        data-theme="dark"
-      >
+      <div className="flex items-center justify-center w-full min-h-screen">
         <div className="flex flex-col gap-y-2">
-          <div className="join flex">
-            <button
-              onClick={() => {
+          <SegmentedControl
+            options={[
+              { label: "Log in", value: "login" },
+              { label: "Sign up", value: "signup" },
+            ]}
+            onChange={(value) => {
+              if (value === "login") {
                 setSignup(false);
-              }}
-              className={loginClasses}
-            >
-              Log in
-            </button>
-            <button
-              onClick={() => {
+              } else {
                 setSignup(true);
-              }}
-              className={signupClasses}
-            >
-              Sign up
-            </button>
-          </div>
+              }
+            }}
+            direction="horizontal"
+          />
           {signup && <Signup setHasAuthenticated={setHasAuthenticated} />}
           {!signup && <Login setHasAuthenticated={setHasAuthenticated} />}
         </div>

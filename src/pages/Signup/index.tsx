@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import { signUp, confirmSignUp } from "aws-amplify/auth";
-
 type Props = {
   setHasAuthenticated: (value: boolean) => void;
 };
@@ -15,18 +14,17 @@ function Signup({ setHasAuthenticated }: Props) {
     event.preventDefault();
 
     if (nextStep === "CONFIRM_SIGN_UP") {
-      try {
-        console.log("confirmSignUp:", email, code);
-        await confirmSignUp({
-          username: email,
-          confirmationCode: code,
+      confirmSignUp({
+        username: email,
+        confirmationCode: code,
+      })
+        .then(async (response) => {
+          console.log("confirmSignUp response:", response);
+          setHasAuthenticated(true);
+        })
+        .catch((error) => {
+          console.log("Error signing up", error);
         });
-        console.log("User confirmed");
-        setHasAuthenticated(true);
-      } catch (error) {
-        console.log("Error signing up", error);
-      }
-      return;
     } else if (nextStep === "NONE") {
       try {
         const { nextStep, userId } = await signUp({
@@ -47,10 +45,10 @@ function Signup({ setHasAuthenticated }: Props) {
   };
 
   return (
-    <form onSubmit={handleSignUp} className="form-control gap-y-3">
+    <form onSubmit={handleSignUp} className="flex flex-col gap-y-1">
       {nextStep === "NONE" && (
         <>
-          <label className="input input-bordered flex items-center gap-2">
+          <label className="flex items-center gap-2 border border-secondary rounded-4 p-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -68,7 +66,7 @@ function Signup({ setHasAuthenticated }: Props) {
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
           </label>
-          <label className="input input-bordered flex items-center gap-2">
+          <label className="flex items-center gap-2 border border-secondary rounded-4 p-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"

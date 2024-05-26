@@ -16,14 +16,19 @@ function Category({ activeLabel, label, onClick }: Props) {
     }
   );
 
+  // const [onError, setOnError] = useState(false);
+
+  // console.log("err", onError);
+
   return (
     <div onClick={onClick(label)} className={divClasses}>
-      <div className="w-14 aspect-square rounded-4 overflow-hidden text-center">
-        <img
+      <div className="w-14 aspect-square rounded-4 overflow-hidden text-center bg-secondary">
+        {/* <img
           src="https://via.placeholder.com/100"
           alt="Category"
+          onError={() => setOnError(true)}
           className="object-cover"
-        />
+        /> */}
       </div>
       <Paragraph>{label}</Paragraph>
     </div>

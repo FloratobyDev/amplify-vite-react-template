@@ -1,4 +1,4 @@
-import { useRef, useState, MouseEvent } from "react";
+import { useRef, useState, MouseEvent, useEffect } from "react";
 import ArrowUpRight01Icon from "../../logos/ArrowUpRight01Icon";
 import Cancel01Icon from "../../logos/Cancel01Icon";
 import Navigation03Icon from "../../logos/Navigation03Icon";
@@ -11,19 +11,157 @@ import { useMessage } from "../../context/MessageProvider";
 import classNames from "classnames";
 import SubParagraph from "../SubParagraph";
 import Modal from "../Modal";
+import { Schema } from "../../../amplify/data/resource";
+import { useAuth } from "../../context/AuthProvider";
+import { useClient } from "../../hooks/useClient";
+import dayjs from "dayjs";
 
 type Props = {
-  userId: string;
+  userInfo: Schema["User"]["type"];
 };
 
-function MessageInformation({ userId }: Props) {
-  const [show, setShow] = useState(false); // [1
+type MessageType = {
+  senderId: string;
+  content: string;
+  createdAt: string;
+};
+
+function MessageInformation({ userInfo }: Props) {
+  const [show, setShow] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const [message, setMessage] = useState("");
+  const [hasMessageAlert, setHasMessageAlert] = useState(false);
+  const [sentMessages, setSentMessages] = useState<Array<MessageType>>([]);
   const { setCurrentMessagingUsers } = useMessage();
+  const { userInformation } = useAuth();
+  const { client } = useClient();
+  const [roomId, setRoomId] = useState("");
+  const divRef = useRef<HTMLDivElement>(null);
+  const currentPostion = useRef(0);
+
+  function handleMessage(e: React.ChangeEvent<HTMLInputElement>) {
+    setMessage(e.target.value);
+  }
+
+  async function handleSubmitMessage() {
+    if (!userInformation) return;
+    client.models.Message.create({
+      roomId: roomId,
+      senderId: userInformation.id,
+      content: message,
+    })
+      .then((response) => {
+        setSentMessages((prev) => [
+          ...prev,
+          {
+            senderId: userInformation.id,
+            content: message,
+            createdAt: new Date().toISOString(),
+          },
+        ]);
+        setMessage("");
+        currentPostion.current = divRef.current?.scrollHeight || 0;
+        console.log("Message sent:", response);
+      })
+      .catch((error) => {
+        setMessage("");
+        console.error("Error sending message:", error);
+      });
+  }
+
+  useEffect(() => {
+    if (divRef.current) {
+      console.log("scrolling to bottom");
+      divRef.current.scrollTo(
+        currentPostion.current,
+        divRef.current.scrollHeight
+      );
+    }
+  }, [sentMessages, show]);
+
+  useEffect(() => {
+    const messageSub = client.models.Message.onCreate({
+      filter: {
+        and: {
+          roomId: {
+            eq: roomId,
+          },
+          senderId: {
+            eq: userInfo.id,
+          },
+        },
+      },
+    }).subscribe({
+      next: (msg) => {
+        setSentMessages((prev) => [...prev, msg]);
+        setHasMessageAlert(true);
+        currentPostion.current = divRef.current?.scrollHeight || 0;
+      },
+      error: (error) => {
+        console.error("Error subscribing to messages:", error);
+      },
+    });
+
+    return () => messageSub.unsubscribe();
+  }, [client.models.Message, roomId, userInfo.id]);
+
+  useEffect(() => {
+    async function getRoomMessages() {
+      if (!userInfo.rooms || userInformation === undefined) return;
+
+      const connectionRooms = userInfo.rooms();
+      const userRooms = userInformation.rooms();
+      await Promise.all([connectionRooms, userRooms])
+        .then((values) => {
+          const commonRoom = values[0].data.filter((room) => {
+            return values[1].data.some(
+              (userRoom) => userRoom.roomId === room.roomId
+            );
+          });
+          if (commonRoom.length === 0) return;
+          setRoomId(commonRoom[0].roomId);
+          commonRoom[0]
+            .room()
+            .then((room) => {
+              room.data
+                ?.messages()
+                .then((messages) => {
+                  const messageData = messages.data.map((message) => {
+                    return {
+                      senderId: message.senderId,
+                      content: message.content,
+                      createdAt: message.createdAt,
+                    };
+                  });
+                  //sort messages by date
+                  messageData.sort((a, b) => {
+                    return (
+                      new Date(a.createdAt).getTime() -
+                      new Date(b.createdAt).getTime()
+                    );
+                  });
+                  setSentMessages(messageData);
+                  console.log("messages", messages.data);
+                })
+                .catch((error) => {
+                  console.error("Error fetching messages:", error);
+                });
+            })
+            .catch((error) => {
+              console.error("Error fetching room:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error fetching rooms:", error);
+        });
+    }
+    getRoomMessages();
+  }, [client.models.RoomUser, userInfo, userInformation]);
 
   useOutsideClick(ref, show, handleShow);
 
   function handleShow() {
+    setHasMessageAlert(false);
     setShow(!show);
   }
 
@@ -31,7 +169,7 @@ function MessageInformation({ userId }: Props) {
     e.stopPropagation();
     console.log("close message");
     setCurrentMessagingUsers((prev) => {
-      const newUsers = prev.filter((user) => user !== userId);
+      const newUsers = prev.filter((user) => user.id !== userInfo.id);
       console.log(newUsers);
       return newUsers;
     });
@@ -77,9 +215,14 @@ function MessageInformation({ userId }: Props) {
       </Modal>
       <div className="relative flex" ref={ref}>
         {show && (
-          <FloatingCard className="absolute flex flex-col bottom-0 right-16 min-w-[254px]">
+          <FloatingCard
+            onMouseEnter={() => {
+              if (hasMessageAlert) setHasMessageAlert(false);
+            }}
+            className="absolute flex flex-col bottom-0 right-16 min-w-[254px]"
+          >
             <div className="flex justify-between items-center p-2">
-              <Paragraph>{userId}</Paragraph>
+              <Paragraph>{userInfo.fullName}</Paragraph>
               <div className="flex gap-x-0.5">
                 <Button onClick={openModalFromButton}>
                   <ArrowUpRight01Icon />
@@ -89,52 +232,41 @@ function MessageInformation({ userId }: Props) {
                 </Button>
               </div>
             </div>
-            <div className="h-[216px] border-y-0.5 border-secondary overflow-auto">
-              <div className="p-2">
-                <div>
-                  <div className="bg-secondary rounded-4 p-2 w-[80%]">
-                    <Paragraph>
-                      Lorem ipsum is placeholder Lorem ipsum is placeholder
-                    </Paragraph>
-                  </div>
-                  <SubParagraph>2:30 p.m</SubParagraph>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="bg-secondary rounded-4 p-2 w-[80%]">
-                    <Paragraph>
-                      Lorem ipsum is placeholder Lorem ipsum is placeholder
-                    </Paragraph>
-                  </div>
-                  <SubParagraph>2:30 p.m</SubParagraph>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="bg-secondary rounded-4 p-2 w-[80%]">
-                    <Paragraph>
-                      Lorem ipsum is placeholder Lorem ipsum is placeholder
-                    </Paragraph>
-                  </div>
-                  <SubParagraph>2:30 p.m</SubParagraph>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="bg-secondary rounded-4 p-2 w-[80%]">
-                    <Paragraph>
-                      Lorem ipsum is placeholder Lorem ipsum is placeholder
-                    </Paragraph>
-                  </div>
-                  <SubParagraph>2:30 p.m</SubParagraph>
-                </div>
+            <div
+              ref={divRef}
+              className="h-[216px] border-y-0.5 border-secondary overflow-auto"
+            >
+              <div className="p-2 flex flex-col gap-y-1">
+                {sentMessages.map((message, index) => {
+                  const messageClasses = classNames({
+                    "flex flex-col items-end":
+                      message.senderId === userInformation?.id,
+                  });
+                  return (
+                    <div key={index} className={messageClasses}>
+                      <div className="bg-secondary rounded-4 p-2 w-[80%]">
+                        <Paragraph>{message.content}</Paragraph>
+                      </div>
+                      <SubParagraph>
+                        {dayjs(message.createdAt).format("hh:mm:ss")}
+                      </SubParagraph>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="flex gap-x-1 justify-between p-1">
               <Search
                 autoFocus
                 placeholder="Type a message..."
-                onChange={() => {
-                  throw new Error("Function not implemented.");
-                } } value={""}              />
-              <div className="px-2 border border-secondary rounded-4 flex items-center justify-center">
-                <Navigation03Icon />
-              </div>
+                onChange={handleMessage}
+                value={message}
+              />
+              <Button onClick={handleSubmitMessage}>
+                <div className="px-2 border border-secondary rounded-4 flex items-center justify-center h-full">
+                  <Navigation03Icon />
+                </div>
+              </Button>
             </div>
           </FloatingCard>
         )}
@@ -143,8 +275,11 @@ function MessageInformation({ userId }: Props) {
           onMouseLeave={handleHideClose}
           onClick={handleShow}
           role="button"
-          className="h-12 w-12 min-w-12 rounded-full bg-secondary relative"
+          className="h-12 w-12 min-w-12 rounded-full bg-secondary relative flex items-center justify-center"
         >
+          {hasMessageAlert && (
+            <div className="h-4 w-4 bg-red-400 rounded-full" />
+          )}
           <div onClick={handleCloseMessage} className={closeClasses}>
             <Cancel01Icon />
           </div>

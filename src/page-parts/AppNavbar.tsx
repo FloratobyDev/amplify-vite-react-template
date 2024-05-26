@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthProvider";
 import { getUrl } from "aws-amplify/storage";
 import NotificationDropdown from "../components/NotificationDropdown";
 import Notification03Icon from "../logos/Notification03Icon";
+import ProfileLogo from "../logos/ProfileLogo";
 
 function AppNavbar() {
   const { setHasAuthenticated, userInformation } = useAuth();
@@ -62,9 +63,14 @@ function AppNavbar() {
         <NotificationDropdown jsxComponent={<Notification03Icon />} />
         <Dropdown
           jsxComponent={
-            <div className="h-5 w-5">
-              <img src={image} alt="profile-image object-fill" />
-            </div>
+            <>
+              {!image && <ProfileLogo />}
+              {image && (
+                <div className="w-5 h-5 flex items-center justify-center">
+                  <img src={image} alt="profile-image object-fill" />
+                </div>
+              )}
+            </>
           }
           values={buttons}
         />
