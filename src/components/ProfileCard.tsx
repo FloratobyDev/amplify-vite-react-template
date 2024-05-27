@@ -3,15 +3,13 @@ import Badge from "./Badge";
 import Italic from "./Italic";
 import Paragraph from "./Paragraph";
 import Link02Icon from "../logos/Link02Icon";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import classNames from "classnames";
 import Modal from "./Modal";
 import FloatingCard from "./FloatingCard";
 import Button from "./Button";
 import Cancel01Icon from "../logos/Cancel01Icon";
 import ProfileLogo from "../logos/ProfileLogo";
-import Pill from "./Pill";
-import FilledStarIcon from "../logos/FilledStarIcon";
 import { ProfileType } from "../types";
 import { useAuth } from "../context/AuthProvider";
 import { useClient } from "../hooks/useClient";
@@ -29,11 +27,20 @@ function ProfileCard({
     overallRating,
     shortInfoList,
     shortDescription,
+    user,
   },
 }: Props) {
-  const shortInfoStringWithCommas = shortInfoList.join(", ");
+  const shortInfoStringWithCommas = useMemo(() => {
+    const infoWithValue = shortInfoList.filter(
+      (info) => info !== "" && info !== "null"
+    );
+    if (infoWithValue.length === 0) return "No information available";
+    return infoWithValue.join(", ");
+  }, [shortInfoList]);
+  console.log("shortInfoStringWithCommas", shortInfoStringWithCommas);
   const [showModal, setShowModal] = useState(false);
   const [showClose, setShowClose] = useState(false);
+  const [status, setStatus] = useState(connectionStatus);
   const { userInformation } = useAuth();
   const { client } = useClient();
 
@@ -44,14 +51,6 @@ function ProfileCard({
   function handleHideClose() {
     setShowClose(false);
   }
-
-  const divClasses = classNames(
-    "cursor-pointer hover:shadow-custom px-2 py-1 gap-x-2 absolute top-2 right-2 bg-white rounded-4",
-    {
-      hidden: !showClose,
-      flex: showClose,
-    }
-  );
 
   function handleModal() {
     setShowModal(!showModal);
@@ -65,18 +64,60 @@ function ProfileCard({
 
     const requestResponse = await client.models.ConnectionRequest.create({
       senderId: userInformation.id,
+      name: name || "Anonymous",
       receiverId: id,
       status: "pending",
-    });
+    })
+      .then((res) => {
+        setStatus("pending");
+        console.log("Request Response:", res);
+      })
+      .catch((err) => {
+        setStatus("error");
+        console.error("Request Error:", err);
+      });
     const receivedResponse = await client.models.ConnectionReceived.create({
       receiverId: id,
+      name: userInformation.fullName || "Anomymous",
       senderId: userInformation.id,
       status: "pending",
-    });
+    })
+      .then((res) => {
+        console.log("Received Response:", res);
+      })
+      .catch((err) => {
+        console.error("Received Error:", err);
+      });
 
     console.log("Request Response:", requestResponse);
     console.log("Received Response:", receivedResponse);
   }
+
+  const divClasses = classNames(
+    "cursor-pointer hover:shadow-custom px-2 py-1 gap-x-2 absolute top-2 right-2 rounded-4",
+    {
+      "bg-white":
+        status === "pending" ||
+        status === "connect" ||
+        status === "accepted" ||
+        status === "declined",
+      "bg-error": status === "error",
+      hidden: !showClose,
+      flex: showClose,
+    }
+  );
+
+  const modalDivClasses = classNames(
+    "px-4 py-1  rounded-4 hover:scale-[105%] transition-all",
+    {
+      "bg-secondary":
+        status === "pending" ||
+        status === "connect" ||
+        status === "accepted" ||
+        status === "declined",
+      "bg-error": status === "error",
+    }
+  );
 
   return (
     <>
@@ -86,10 +127,8 @@ function ProfileCard({
             <SubTitle>Profile Information</SubTitle>
             <div className="flex items-center gap-x-2">
               <Button onClick={submitConnectionRequest}>
-                <div className="px-4 py-1 bg-secondary rounded-4 hover:scale-[105%] transition-all">
-                  <Paragraph className="capitalize">
-                    {connectionStatus}
-                  </Paragraph>
+                <div className={modalDivClasses}>
+                  <Paragraph className="capitalize">{status}</Paragraph>
                 </div>
               </Button>
               <Button onClick={handleModal}>
@@ -108,128 +147,46 @@ function ProfileCard({
                 <div className="flex flex-col gap-y-1 mb-6">
                   <div className="flex gap-x-2 items-center">
                     <ProfileLogo />
-                    <Paragraph>Profile</Paragraph>
+                    <Paragraph>{user.gender}</Paragraph>
                   </div>
                   <div className="flex gap-x-2 items-center">
                     <ProfileLogo />
-                    <Paragraph>Profile</Paragraph>
+                    <Paragraph>{user.race}</Paragraph>
                   </div>
                   <div className="flex gap-x-2 items-center">
                     <ProfileLogo />
-                    <Paragraph>Profile</Paragraph>
+                    <Paragraph>{user.age}</Paragraph>
                   </div>
                 </div>
                 <div className="flex flex-col items-start gap-y-2">
                   <Paragraph bold>Achievements</Paragraph>
-                  <div className="flex flex-wrap gap-1">
-                    <Pill label="Rookie" />
+                  <div className="flex flex-wrap gap-1 w-full">
+                    <div className="h-40 w-full bg-secondary rounded-4 flex items-center justify-center">
+                      <Paragraph>TBD</Paragraph>
+                    </div>
+                    {/* <Pill label="Rookie" />
                     <Pill label="Ice Breakerss" />
                     <Pill label="Master" />
                     <Pill label="Rookie" />
                     <Pill label="Rookie" />
-                    <Pill label="Master" />
+                    <Pill label="Master" /> */}
                   </div>
                 </div>
               </div>
               <div className="flex-1 flex flex-col text-left p-5 gap-y-3">
                 <div className="flex flex-col gap-y-1">
                   <Paragraph bold>About Me</Paragraph>
-                  <Paragraph>
-                    Lorem ipsum is placeholder text commonly used in the
-                    graphic, print, and publishing industries for previewing
-                    layouts and visual mockups.Lorem ipsum is placeholder text
-                    commonly used in the graphic, print, and publishing
-                    industries for previewing layouts and visual mockups.Lorem
-                    ipsum is placeholder text commonly used in the graphic,
-                    print, and publishing industries for previewing layouts and
-                    visual mockups.
-                  </Paragraph>
+                  <Paragraph>{shortDescription}</Paragraph>
                 </div>
-                <div className="flex flex-col gap-y-1">
-                  <Paragraph bold>Ethnicity</Paragraph>
-                  <Paragraph>
-                    Lorem ipsum is placeholder text commonly used in the
-                    graphic, print, and publishing industries for previewing
-                    layouts and visual mockups.Lorem ipsum is placeholder text
-                    commonly used in the graphic, print, and publishing
-                    industries for previewing layouts and visual mockups.Lorem
-                    ipsum is placeholder text commonly used in the graphic,
-                    print, and publishing industries for previewing layouts and
-                    visual mockups.
-                  </Paragraph>
-                </div>
-                <div className="flex flex-col gap-y-1">
-                  <Paragraph bold>Race</Paragraph>
-                  <Paragraph>
-                    Lorem ipsum is placeholder text commonly used in the
-                    graphic, print, and publishing industries for previewing
-                    layouts and visual mockups.Lorem ipsum is placeholder text
-                    commonly used in the graphic, print, and publishing
-                    industries for previewing layouts and visual mockups.Lorem
-                    ipsum is placeholder text commonly used in the graphic,
-                    print, and publishing industries for previewing layouts and
-                    visual mockups.
-                  </Paragraph>
+                <div className="w-full bg-secondary h-full rounded-4 flex items-center justify-center">
+                  <Paragraph>TBD</Paragraph>
                 </div>
               </div>
             </div>
-            <div className="basis-1/4 p-5 text-left flex flex-col gap-y-1 overflow-auto">
+            <div className="basis-1/4 p-5 text-left flex flex-col gap-y-1 overflow-auto h-full">
               <Paragraph bold>Reviews</Paragraph>
-              <div className="flex flex-col items-start gap-y-0.5 overflow-auto">
-                <Paragraph>Anna Hathaway</Paragraph>
-                <div className="flex">
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                </div>
-                <Paragraph>
-                  Lorem ipsum is placeholder text commonly used in the graphic,
-                  print, and publishing industries for previewing layouts and
-                  visual mockups...
-                </Paragraph>
-              </div>
-              <div className="flex flex-col items-start gap-y-0.5">
-                <Paragraph>Anna Hathaway</Paragraph>
-                <div className="flex">
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                </div>
-                <Paragraph>
-                  Lorem ipsum is placeholder text commonly used in the graphic,
-                  print, and publishing industries for previewing layouts and
-                  visual mockups...
-                </Paragraph>
-              </div>
-              <div className="flex flex-col items-start gap-y-0.5">
-                <Paragraph>Anna Hathaway</Paragraph>
-                <div className="flex">
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                </div>
-                <Paragraph>
-                  Lorem ipsum is placeholder text commonly used in the graphic,
-                  print, and publishing industries for previewing layouts and
-                  visual mockups...
-                </Paragraph>
-              </div>
-              <div className="flex flex-col items-start gap-y-0.5">
-                <Paragraph>Anna Hathaway</Paragraph>
-                <div className="flex">
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                  <FilledStarIcon />
-                </div>
-                <Paragraph>
-                  Lorem ipsum is placeholder text commonly used in the graphic,
-                  print, and publishing industries for previewing layouts and
-                  visual mockups...
-                </Paragraph>
+              <div className="h-96 rounded-4 bg-secondary flex items-center justify-center">
+                <Paragraph bold>TBD</Paragraph>
               </div>
             </div>
           </div>
@@ -248,7 +205,7 @@ function ProfileCard({
             onClick={(e: MouseEvent<HTMLElement>) => submitConnectionRequest(e)}
           >
             <Link02Icon />
-            <Paragraph className="capitalize">{connectionStatus}</Paragraph>
+            <Paragraph className="capitalize">{status}</Paragraph>
           </div>
         </div>
         <div className="flex flex-col mb-2">
@@ -256,7 +213,11 @@ function ProfileCard({
             <SubTitle>{name}</SubTitle>
             <Badge label={overallRating} />
           </div>
-          <Italic>{shortInfoStringWithCommas}</Italic>
+          {
+            <Italic>
+              {shortInfoStringWithCommas || "No information available"}
+            </Italic>
+          }
         </div>
         <Paragraph>
           {shortDescription.length > 200

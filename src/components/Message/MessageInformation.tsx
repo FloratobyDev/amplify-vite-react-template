@@ -15,6 +15,7 @@ import { Schema } from "../../../amplify/data/resource";
 import { useAuth } from "../../context/AuthProvider";
 import { useClient } from "../../hooks/useClient";
 import dayjs from "dayjs";
+import { getUrl } from "aws-amplify/storage";
 
 type Props = {
   userInfo: Schema["User"]["type"];
@@ -38,10 +39,25 @@ function MessageInformation({ userInfo }: Props) {
   const [roomId, setRoomId] = useState("");
   const divRef = useRef<HTMLDivElement>(null);
   const currentPostion = useRef(0);
+  const [image, setImage] = useState("");
 
   function handleMessage(e: React.ChangeEvent<HTMLInputElement>) {
     setMessage(e.target.value);
   }
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!userInfo || !userInfo.profilePictureUrl) return;
+
+      const url = await getUrl({
+        path: userInfo?.profilePictureUrl || "",
+      });
+      setImage(url.url.toString());
+    };
+    console.log("fetching image");
+
+    fetchImage();
+  }, [userInfo]);
 
   async function handleSubmitMessage() {
     if (!userInformation) return;
@@ -283,6 +299,7 @@ function MessageInformation({ userInfo }: Props) {
           <div onClick={handleCloseMessage} className={closeClasses}>
             <Cancel01Icon />
           </div>
+          <img src={image} alt="connection-profile-image" />
         </div>
       </div>
     </>

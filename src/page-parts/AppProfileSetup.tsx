@@ -362,7 +362,7 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
         console.log("User updated successfully", response);
         setUserInformation(response.data as Schema["User"]["type"]);
         setTempClose(true);
-        // localStorage.setItem("closeProfile", "true");
+        localStorage.setItem("closeProfile", "true");
       })
       .catch((error) => {
         setError("Error updating user");

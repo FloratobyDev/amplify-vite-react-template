@@ -3,6 +3,7 @@ import MessageInformation from "./MessageInformation";
 import useOutsideClick from "../../hooks/useClickOutside";
 import { useMessage } from "../../context/MessageProvider";
 import { Schema } from "../../../amplify/data/resource";
+import BubbleChatIcon from "../../logos/BubbleChatIcon";
 
 function MessageManager() {
   const [show, setShow] = useState(false);
@@ -32,8 +33,10 @@ function MessageManager() {
       <div
         onClick={handleShow}
         role="button"
-        className="h-12 w-12 min-w-12 rounded-full bg-secondary"
-      />
+        className="h-12 w-12 min-w-12 rounded-full bg-secondary flex items-center justify-center"
+      >
+        <BubbleChatIcon />
+      </div>
     </div>
   );
 }

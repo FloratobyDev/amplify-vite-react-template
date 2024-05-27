@@ -14,8 +14,18 @@ type Props = {
   jsxComponent: React.ReactNode;
 };
 
+type BaseType = {
+  type: string;
+};
+
+type ModifiedConnectionType = Schema["ConnectionReceived"]["type"] & BaseType;
+type ModifiedRequestType = Schema["ConnectionRequest"]["type"] & BaseType;
+
+type CombinationType = ModifiedConnectionType | ModifiedRequestType;
+
 function NotificationDropdown({ jsxComponent }: Props) {
-  const [show, setShow] = useState(true);
+  const [hasSeen, setHasSeen] = useState(false);
+  const [show, setShow] = useState(false);
   const [hasNotification, setHasNotification] = useState(false);
   const [connectedAcceptedNotification, setConnectedAcceptedNotification] =
     useState<Array<Schema["ConnectionReceived"]["type"]>>([]);
@@ -38,6 +48,8 @@ function NotificationDropdown({ jsxComponent }: Props) {
         .then((connections) => {
           if (connections.data.length > 0) {
             setConnectedAcceptedNotification(connections.data);
+            if (connections.data.some((connection) => !connection.hasSeen))
+              setHasNotification(true);
           }
         })
         .catch((error) => {
@@ -63,6 +75,8 @@ function NotificationDropdown({ jsxComponent }: Props) {
         .then((requests) => {
           if (requests.data.length > 0) {
             setConnectionRequestNotification(requests.data);
+            if (requests.data.some((request) => !request.hasSeen))
+              setHasNotification(true);
           }
         })
         .catch((error) => {
@@ -117,18 +131,71 @@ function NotificationDropdown({ jsxComponent }: Props) {
   }, [
     client.models.ConnectionReceived,
     client.models.ConnectionRequest,
-    connectedAcceptedNotification,
-    connectionRequestNotification,
     userInformation,
-    userInformation?.id,
   ]);
 
   const ref = useRef(null);
   useOutsideClick(ref, show, handleShow);
 
-  function handleShow() {
+  async function handleShow() {
     setHasNotification(false);
     setShow(!show);
+    if (!hasSeen) {
+      console.log("Has not seen notifications yet");
+
+      const connectedAcceptedNotifNotSeen =
+        connectedAcceptedNotification.filter(
+          (connection) => !connection.hasSeen
+        );
+
+      const connectionRequestNotifNotSeen =
+        connectionRequestNotification.filter((request) => !request.hasSeen);
+
+      const hasSeenUpdateList = connectedAcceptedNotifNotSeen.map(
+        (connection) => {
+          if (!userInformation?.id) return;
+          return new Promise((resolve, reject) => {
+            client.models.ConnectionReceived.update({
+              senderId: userInformation?.id,
+              receiverId: connection.receiverId,
+              hasSeen: true,
+            })
+              .then(() => {
+                resolve("Success");
+              })
+              .catch(() => {
+                reject("Error updating connection received");
+              });
+          });
+        }
+      );
+
+      const hasSeenRequestList = connectionRequestNotifNotSeen.map(
+        (request) => {
+          if (!userInformation?.id) return;
+          return new Promise((resolve, reject) => {
+            client.models.ConnectionRequest.update({
+              senderId: userInformation?.id,
+              receiverId: request.receiverId,
+              hasSeen: true,
+            })
+              .then(() => {
+                resolve("Success");
+              })
+              .catch(() => {
+                reject("Error updating connection request");
+              });
+          });
+        }
+      );
+
+      await Promise.all([...hasSeenUpdateList, ...hasSeenRequestList]).catch(
+        (error) => {
+          console.error("Error updating notifications:", error);
+        }
+      );
+      setHasSeen(true);
+    }
   }
 
   async function handleAcceptRequest(senderId: string) {
@@ -220,7 +287,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
     console.log("Response:", response);
   }
 
-  const combinedNotifications = useMemo(() => {
+  const combinedNotifications: CombinationType[] = useMemo(() => {
     return [
       ...connectedAcceptedNotification.map((connection) => ({
         ...connection,
@@ -241,7 +308,9 @@ function NotificationDropdown({ jsxComponent }: Props) {
     <div ref={ref} className="relative flex-col items-start gap-y-1">
       <button
         className="gap-x-2 py-1.5 px-2 rounded-4 cursor-pointer relative"
-        onClick={handleShow}
+        onClick={async () => {
+          handleShow();
+        }}
       >
         {hasNotification && (
           <span className="h-1.5 w-1.5 absolute top-1 right-1 rounded-full bg-red-400" />
@@ -266,7 +335,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
                   return (
                     <ConnectionRequestNotification
                       key={index}
-                      name={notification.senderId}
+                      name={notification.name}
                       Accept={() => handleAcceptRequest(notification.senderId)}
                       Decline={() =>
                         handleDeclineRequest(notification.senderId)
@@ -278,7 +347,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
                     <ConnectionAcceptanceNotification
                       key={index}
                       status={notification.status}
-                      name={notification.receiverId}
+                      name={notification.name}
                     />
                   );
                 }

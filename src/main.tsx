@@ -5,13 +5,16 @@ import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
 import AuthProvider from "./context/AuthProvider.tsx";
 import MessageProvider from "./context/MessageProvider.tsx";
+import { BrowserRouter } from "react-router-dom";
 
 Amplify.configure(outputs);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <AuthProvider>
-    <MessageProvider>
-      <App />
-    </MessageProvider>
-  </AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <MessageProvider>
+        <App />
+      </MessageProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );

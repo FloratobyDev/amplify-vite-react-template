@@ -1,15 +1,15 @@
 import Category from "../components/Category";
 
 type Props = {
-  labels: string[];
+  categories: string[];
   activeLabel: string;
-  handleLabel: (label: string) => () => void;
+  handleLabel: (label: string) => Promise<void>;
 };
 
-function AppCategoryList({ labels, activeLabel, handleLabel }: Props) {
+function AppCategoryList({ categories, activeLabel, handleLabel }: Props) {
   return (
     <div className="flex items-center w-full">
-      {labels.map((label, index) => (
+      {categories.map((label, index) => (
         <Category
           key={index}
           activeLabel={activeLabel}

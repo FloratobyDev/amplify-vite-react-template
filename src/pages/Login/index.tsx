@@ -110,8 +110,11 @@ function Login({ setHasAuthenticated }: Props) {
         />
       </label>
       {error.value && <p className="text-error">{error.message}</p>}
-      <button type="submit" className="btn">
-        Log in
+      <button
+        type="submit"
+        className="flex items-center gap-2 border border-secondary rounded-4 p-2 text-center hover:bg-secondary"
+      >
+        <span className="w-full">Log in</span>
       </button>
     </form>
   );

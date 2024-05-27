@@ -18,9 +18,9 @@ type Props = {
 function MessageInformation({ onUserClick, onClose }: Props) {
   const { client } = useClient();
   const { userInformation } = useAuth();
-  const [connections, setConnections] = useState<
-    Array<Schema["User"]["type"]>
-  >([]);
+  const [connections, setConnections] = useState<Array<Schema["User"]["type"]>>(
+    []
+  );
 
   useEffect(() => {
     async function getUserData(userID: string) {
@@ -81,28 +81,27 @@ function MessageInformation({ onUserClick, onClose }: Props) {
       </div>
       <div className="overflow-auto h-40 flex flex-col gap-y-1 px-2">
         <div className="flex flex-col gap-y-1">
-          <Italic>Online</Italic>
+          <Italic>Connections</Italic>
           <div className="grid grid-cols-8  gap-y-2">
             {connections.map((connection) => (
-              <UserBubble key={connection.id} onUserClick={onUserClick} userInfo={connection} />
+              <UserBubble
+                key={connection.id}
+                onUserClick={onUserClick}
+                userInfo={connection}
+              />
             ))}
-            {/* <UserBubble onUserClick={onUserClick} userId="1" />
-            <UserBubble onUserClick={onUserClick} userId="2" />
-            <UserBubble onUserClick={onUserClick} userId="3" />
-            <UserBubble onUserClick={onUserClick} userId="4" />
-            <UserBubble onUserClick={onUserClick} userId="5" /> */}
           </div>
         </div>
-        <div className="flex flex-col gap-y-1">
+        {/* <div className="flex flex-col gap-y-1">
           <Italic>Connections</Italic>
           <div className="grid grid-cols-8 gap-y-2">
-            {/* <UserBubble onUserClick={onUserClick} userId="6" />
+            <UserBubble onUserClick={onUserClick} userId="6" />
             <UserBubble onUserClick={onUserClick} userId="7" />
             <UserBubble onUserClick={onUserClick} userId="8" />
             <UserBubble onUserClick={onUserClick} userId="9" />
-            <UserBubble onUserClick={onUserClick} userId="10" /> */}
+            <UserBubble onUserClick={onUserClick} userId="10" />
           </div>
-        </div>
+        </div> */}
       </div>
     </FloatingCard>
   );

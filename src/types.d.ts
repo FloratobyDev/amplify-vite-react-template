@@ -1,14 +1,16 @@
+import { Schema } from "../amplify/data/resource";
+
 export type DropdownType = {
   label: string;
   onClick: () => void;
-}
+};
 
 export type CategoryListType = {
-  category: string;
-  country: string;
+  race: string;
+  spokenLanguage: string;
   age: string;
-  interest: string;
-}
+  interests: string;
+};
 
 export type ProfileType = {
   id: string;
@@ -17,4 +19,5 @@ export type ProfileType = {
   overallRating: string;
   shortInfoList: Array<string>;
   shortDescription: string;
+  user: Schema["User"]["type"];
 };

@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Schema } from "../../../amplify/data/resource";
+import { getUrl } from "aws-amplify/storage";
 
 type Props = {
   onUserClick: (value: Schema["User"]["type"]) => () => void;
@@ -6,7 +8,19 @@ type Props = {
 };
 
 function UserBubble({ onUserClick, userInfo }: Props) {
-  console.log("userInfo", userInfo.profilePictureUrl);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!userInfo || !userInfo.profilePictureUrl) return;
+
+      const url = await getUrl({
+        path: userInfo?.profilePictureUrl || "",
+      });
+      setImage(url.url.toString());
+    };
+    fetchImage();
+  }, [userInfo]);
 
   return (
     <div
@@ -14,7 +28,7 @@ function UserBubble({ onUserClick, userInfo }: Props) {
       className="w-8 h-8 bg-secondary rounded-full cursor-pointer"
     >
       <img
-        src={userInfo?.profilePictureUrl || "https://via.placeholder.com/150"}
+        src={image || ""}
         alt="user-profile-pic"
         className="w-8 h-8 rounded-full"
       />

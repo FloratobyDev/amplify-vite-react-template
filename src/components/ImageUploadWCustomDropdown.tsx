@@ -2,9 +2,10 @@ import { ChangeEvent, useRef, useState } from "react";
 import Paragraph from "./Paragraph";
 type Props = {
   onUpload: (file: File) => void;
-}
+  currentImage?: string | null;
+};
 
-function ImageUploadWCustomDropdown({ onUpload }: Props){
+function ImageUploadWCustomDropdown({ onUpload, currentImage }: Props) {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,9 +25,12 @@ function ImageUploadWCustomDropdown({ onUpload }: Props){
     inputRef.current?.click();
   }
 
+  const imgUrl = imagePreviewUrl || currentImage;
+  console.log("imgUrl", imagePreviewUrl, "cImage", currentImage);
+
   return (
     <div
-      className="flex flex-col items-center justify-center h-32 rounded-4 border border-primary border-dashed bg-secondary cursor-pointer relative"
+      className="flex flex-col items-center justify-center aspect-square rounded-4 border border-primary border-dashed bg-secondary cursor-pointer relative"
       onClick={handleClickInput}
     >
       <input
@@ -37,11 +41,12 @@ function ImageUploadWCustomDropdown({ onUpload }: Props){
         accept="image/*"
         style={{ display: "none" }}
         onChange={handleFileChange}
+        alt="Image Upload"
       />
-      {!imagePreviewUrl && <Paragraph bold>Upload Image</Paragraph>}
-      {imagePreviewUrl && (
+      {!imgUrl && <Paragraph bold>Upload Image</Paragraph>}
+      {imgUrl && (
         <img
-          src={imagePreviewUrl}
+          src={imgUrl as string}
           alt="Image Preview"
           className="w-full h-full object-fill"
         />

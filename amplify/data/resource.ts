@@ -6,6 +6,8 @@ const schema = a
     ConnectionRequest: a
       .model({
         senderId: a.id().required(),
+        name: a.string().required(),
+        hasSeen: a.boolean().default(false),
         receiverId: a.id().required(),
         status: a.ref("ConnectionStatus").required(),
         sender: a.belongsTo("User", "senderId"),
@@ -19,6 +21,8 @@ const schema = a
       .model({
         senderId: a.id().required(),
         receiverId: a.id().required(),
+        hasSeen: a.boolean().default(false),
+        name: a.string().required(),
         status: a.ref("ConnectionStatus").required(),
         receiver: a.belongsTo("User", "receiverId"),
       })
@@ -92,12 +96,12 @@ const schema = a
         id: a.id().required(),
         name: a.string().required(),
       })
-      .authorization((allow) => [allow.authenticated().to(["read"])]),
+      .authorization((allow) => [allow.authenticated()]),
     DropdownList: a
       .model({
         id: a.id().required(),
         name: a.string().required(),
-        options: a.string().array(),
+        options: a.string().array().required(),
       })
       .authorization((allow) => [allow.authenticated().to(["read"])]),
   })

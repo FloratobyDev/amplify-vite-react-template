@@ -21,6 +21,7 @@ function UserFeed() {
               <input
                 className="input input-bordered join-item w-full"
                 placeholder="Search"
+                alt="Search"
               />
             </div>
             <select className="select select-bordered join-item">

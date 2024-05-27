@@ -1,18 +1,19 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Brand from "../components/Brand";
 import Dropdown from "../components/Dropdown";
 import Paragraph from "../components/Paragraph";
-import Search from "../components/Search";
 import { signOut } from "aws-amplify/auth";
 import { useAuth } from "../context/AuthProvider";
 import { getUrl } from "aws-amplify/storage";
 import NotificationDropdown from "../components/NotificationDropdown";
 import Notification03Icon from "../logos/Notification03Icon";
 import ProfileLogo from "../logos/ProfileLogo";
+import { useNavigate } from "react-router-dom";
 
 function AppNavbar() {
   const { setHasAuthenticated, userInformation } = useAuth();
   const [image, setImage] = useState("");
+  const navigate = useNavigate();
 
   async function handleSignout() {
     await signOut();
@@ -33,12 +34,12 @@ function AppNavbar() {
 
   const buttons = [
     {
-      label: "Profile",
-      onClick: () => console.log("Profile"),
+      label: "Feeds",
+      onClick: () => navigate("/"),
     },
     {
       label: "Settings",
-      onClick: () => console.log("Settings"),
+      onClick: () => navigate("/settings"),
     },
     {
       label: "Sign Out",
@@ -51,14 +52,14 @@ function AppNavbar() {
       <div className="flex items-center justify-center">
         <div className="flex flex-1 gap-x-8 mr-16">
           <Brand />
-          <Search
+          {/* <Search
             hasSearchIcon
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               console.log(e.target.value)
             }
             placeholder="Search"
             value=""
-          />
+          /> */}
         </div>
         <NotificationDropdown jsxComponent={<Notification03Icon />} />
         <Dropdown

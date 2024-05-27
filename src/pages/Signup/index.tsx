@@ -59,11 +59,13 @@ function Signup({ setHasAuthenticated }: Props) {
               <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
             </svg>
             <input
+              autoComplete="on"
               type="text"
               className="grow"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
+              alt="Email Address"
             />
           </label>
           <label className="flex items-center gap-2 border border-secondary rounded-4 p-2">
@@ -80,17 +82,19 @@ function Signup({ setHasAuthenticated }: Props) {
               />
             </svg>
             <input
+              autoComplete="on"
               type="password"
               className="grow"
               value={password}
               placeholder="Password"
               onChange={(e) => setPassword(e.currentTarget.value)}
+              alt="Password"
             />
           </label>
         </>
       )}
       {nextStep === "CONFIRM_SIGN_UP" && (
-        <label className="input input-bordered flex items-center gap-2">
+        <label className="flex items-center gap-2 border border-secondary rounded-4 p-2 mb-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -104,16 +108,21 @@ function Signup({ setHasAuthenticated }: Props) {
             />
           </svg>
           <input
+            autoComplete="on"
             type="password"
             className="grow"
             value={code}
             placeholder="Password"
             onChange={(e) => setCode(e.currentTarget.value)}
+            alt="Password"
           />
         </label>
       )}
-      <button type="submit" className="btn">
-        Sign Up
+      <button
+        type="submit"
+        className="flex items-center gap-2 border border-secondary rounded-4 p-2 text-center hover:bg-secondary"
+      >
+        <span className="w-full">Sign Up</span>
       </button>
     </form>
   );
