@@ -287,7 +287,7 @@ function MessageInformation({ userInfo }: Props) {
           className="h-12 w-12 min-w-12 rounded-full bg-secondary relative flex items-center justify-center"
         >
           {hasMessageAlert && (
-            <div className="h-4 w-4 bg-red-400 rounded-full" />
+            <div className="h-4 w-4 bg-red-400 rounded-full absolute m-auto z-10" />
           )}
           <div onClick={handleCloseMessage} className={closeClasses}>
             <Cancel01Icon />

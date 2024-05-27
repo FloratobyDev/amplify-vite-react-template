@@ -101,7 +101,7 @@ function Login({ setHasAuthenticated }: Props) {
         </svg>
         <input
           type="password"
-          className="grow"
+          className="outline-none bg-transparent"
           value={password}
           placeholder="Password"
           onChange={handleChange(setPassword)}

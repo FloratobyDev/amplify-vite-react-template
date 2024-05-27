@@ -59,7 +59,7 @@ function Signup({ setHasAuthenticated }: Props) {
             <input
               autoComplete="on"
               type="text"
-              className="grow"
+              className="outline-none"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
@@ -82,7 +82,7 @@ function Signup({ setHasAuthenticated }: Props) {
             <input
               autoComplete="on"
               type="password"
-              className="grow"
+              className="outline-none"
               value={password}
               placeholder="Password"
               onChange={(e) => setPassword(e.currentTarget.value)}
@@ -108,7 +108,7 @@ function Signup({ setHasAuthenticated }: Props) {
           <input
             autoComplete="on"
             type="password"
-            className="grow"
+            className="outline-none"
             value={code}
             placeholder="Password"
             onChange={(e) => setCode(e.currentTarget.value)}
