@@ -115,17 +115,14 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
     "Other",
   ];
   const raceOptions = [
-    "Caucasian",
-    "African",
-    "Asian",
-    "Native American",
-    "Pacific Islander",
-    "Hispanic or Latino",
-    "Middle Eastern",
-    "Indigenous Australian",
-    "Mestizo",
-    "Mulatto",
-    "Other",
+    "American",
+    "Chinese",
+    "Indian",
+    "Mexican",
+    "British",
+    "French",
+    "Filipino",
+    "Russian",
   ];
   const languageOptions = [
     "Afrikaans",
@@ -421,7 +418,7 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
                 />
               </div>
               <CustomSelect
-                label="Race"
+                label="National Identity"
                 options={raceOptions}
                 onSelect={handleInformation("race")}
                 selectedValue={newUserInformation.race}
