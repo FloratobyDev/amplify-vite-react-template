@@ -50,16 +50,12 @@ function MessageInformation({ onUserClick, onClose }: Props) {
         );
 
         const connectionInfoList = await Promise.all(fetchConnectionDataBulk);
-
-        console.log("connectionInfoList", connectionInfoList);
         setConnections(connectionInfoList as Array<Schema["User"]["type"]>);
       })
       .catch((error) => {
         console.error("Error fetching connections:", error);
       });
   }, [client.models.Connection, client.models.User, userInformation?.id]);
-
-  console.log("connections", connections);
 
   return (
     <FloatingCard className="absolute flex flex-col bottom-0 right-16 min-w-80 gap-y-1">

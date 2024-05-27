@@ -18,8 +18,7 @@ function Signup({ setHasAuthenticated }: Props) {
         username: email,
         confirmationCode: code,
       })
-        .then(async (response) => {
-          console.log("confirmSignUp response:", response);
+        .then(async () => {
           setHasAuthenticated(true);
         })
         .catch((error) => {
@@ -27,7 +26,7 @@ function Signup({ setHasAuthenticated }: Props) {
         });
     } else if (nextStep === "NONE") {
       try {
-        const { nextStep, userId } = await signUp({
+        const { nextStep } = await signUp({
           username: email,
           password,
           options: {
@@ -36,7 +35,6 @@ function Signup({ setHasAuthenticated }: Props) {
             },
           },
         });
-        console.log("nextStep:", nextStep, userId);
         setNextStep(nextStep.signUpStep);
       } catch (error) {
         console.log("error signing up:", error);

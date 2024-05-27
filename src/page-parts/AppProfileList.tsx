@@ -114,8 +114,6 @@ function AppProfileList({ profiles }: Props) {
     userInformation?.id,
   ]);
 
-  console.log("profiles", profiles);
-
   return (
     <div className="grid grid-cols-4 gap-x-2 gap-y-4">
       {users.map((profile, index) => (

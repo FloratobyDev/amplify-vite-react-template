@@ -141,7 +141,6 @@ function NotificationDropdown({ jsxComponent }: Props) {
     setHasNotification(false);
     setShow(!show);
     if (!hasSeen) {
-      console.log("Has not seen notifications yet");
 
       const connectedAcceptedNotifNotSeen =
         connectedAcceptedNotification.filter(
@@ -201,8 +200,6 @@ function NotificationDropdown({ jsxComponent }: Props) {
   async function handleAcceptRequest(senderId: string) {
     if (!userInformation?.id) return;
 
-    console.log("Sender ID:", senderId, "User ID:", userInformation?.id);
-
     const cUpdate = client.models.ConnectionRequest.update({
       senderId: senderId,
       receiverId: userInformation?.id,
@@ -214,7 +211,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
       receiverId: userInformation?.id,
     });
 
-    const response = await Promise.all([cUpdate, cDelete]).catch((error) => {
+    await Promise.all([cUpdate, cDelete]).catch((error) => {
       console.error("Error accepting connection request:", error);
     });
 
@@ -224,12 +221,12 @@ function NotificationDropdown({ jsxComponent }: Props) {
 
     //create a new connection if update is successful
 
-    const connectionToSender = await client.models.Connection.create({
+    await client.models.Connection.create({
       userId: userInformation?.id,
       connectionId: senderId,
     });
 
-    const connectionToReceiver = await client.models.Connection.create({
+    await client.models.Connection.create({
       userId: senderId,
       connectionId: userInformation?.id,
     });
@@ -239,27 +236,21 @@ function NotificationDropdown({ jsxComponent }: Props) {
     client.models.Room.create({
       id: randomRoomId,
     })
-      .then(async (room) => {
-        console.log("Room created:", room);
-        const senderRoomUser = await client.models.RoomUser.create({
+      .then(async () => {
+        await client.models.RoomUser.create({
           userId: userInformation?.id,
           roomId: randomRoomId,
         });
 
-        const receiverRoomUser = await client.models.RoomUser.create({
+        await client.models.RoomUser.create({
           userId: senderId,
           roomId: randomRoomId,
         });
 
-        console.log("RoomUser:", senderRoomUser, receiverRoomUser);
-        console.log("Room:", room.data);
       })
       .catch((error) => {
         console.error("Error creating room:", error);
       });
-
-    console.log("Connection:", connectionToSender, connectionToReceiver);
-    console.log("Response:", response);
   }
 
   async function handleDeclineRequest(senderId: string) {
@@ -276,7 +267,7 @@ function NotificationDropdown({ jsxComponent }: Props) {
       receiverId: userInformation?.id,
     });
 
-    const response = await Promise.all([cUpdate, cDelete]).catch((error) => {
+    await Promise.all([cUpdate, cDelete]).catch((error) => {
       console.error("Error declining connection request:", error);
     });
 
@@ -284,7 +275,6 @@ function NotificationDropdown({ jsxComponent }: Props) {
       prevConnections.filter((connection) => connection.senderId !== senderId)
     );
 
-    console.log("Response:", response);
   }
 
   const combinedNotifications: CombinationType[] = useMemo(() => {

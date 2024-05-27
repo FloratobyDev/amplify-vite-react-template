@@ -135,7 +135,6 @@ function ProfileFeed() {
   useEffect(() => {
     client.models.DropdownList.list()
       .then((response) => {
-        console.log("DropdownList", response);
         setDropdownList(response.data);
       })
       .catch((error) => {
@@ -203,8 +202,6 @@ function ProfileFeed() {
         and: { ...mapToFitListFilter[0] },
       };
     }
-
-    console.log("initialFitlers", initilaFilter);
 
     client.models.User.list({
       filter: initilaFilter,

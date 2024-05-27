@@ -37,7 +37,6 @@ function ProfileCard({
     if (infoWithValue.length === 0) return "No information available";
     return infoWithValue.join(", ");
   }, [shortInfoList]);
-  console.log("shortInfoStringWithCommas", shortInfoStringWithCommas);
   const [showModal, setShowModal] = useState(false);
   const [showClose, setShowClose] = useState(false);
   const [status, setStatus] = useState(connectionStatus);
@@ -58,39 +57,29 @@ function ProfileCard({
 
   async function submitConnectionRequest(e: MouseEvent<HTMLElement>) {
     e.stopPropagation();
-
-    console.log("Connection Request Submitted", userInformation?.id, id);
     if (!userInformation?.id || !id) return;
 
-    const requestResponse = await client.models.ConnectionRequest.create({
+    await client.models.ConnectionRequest.create({
       senderId: userInformation.id,
       name: name || "Anonymous",
       receiverId: id,
       status: "pending",
     })
-      .then((res) => {
+      .then(() => {
         setStatus("pending");
-        console.log("Request Response:", res);
       })
       .catch((err) => {
         setStatus("error");
         console.error("Request Error:", err);
       });
-    const receivedResponse = await client.models.ConnectionReceived.create({
+    await client.models.ConnectionReceived.create({
       receiverId: id,
       name: userInformation.fullName || "Anomymous",
       senderId: userInformation.id,
       status: "pending",
-    })
-      .then((res) => {
-        console.log("Received Response:", res);
-      })
-      .catch((err) => {
-        console.error("Received Error:", err);
-      });
-
-    console.log("Request Response:", requestResponse);
-    console.log("Received Response:", receivedResponse);
+    }).catch((err) => {
+      console.error("Received Error:", err);
+    });
   }
 
   const divClasses = classNames(

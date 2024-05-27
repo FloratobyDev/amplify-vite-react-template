@@ -26,7 +26,6 @@ function ImageUploadWCustomDropdown({ onUpload, currentImage }: Props) {
   }
 
   const imgUrl = imagePreviewUrl || currentImage;
-  console.log("imgUrl", imagePreviewUrl, "cImage", currentImage);
 
   return (
     <div

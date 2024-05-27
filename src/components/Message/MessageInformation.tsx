@@ -54,7 +54,6 @@ function MessageInformation({ userInfo }: Props) {
       });
       setImage(url.url.toString());
     };
-    console.log("fetching image");
 
     fetchImage();
   }, [userInfo]);
@@ -66,7 +65,7 @@ function MessageInformation({ userInfo }: Props) {
       senderId: userInformation.id,
       content: message,
     })
-      .then((response) => {
+      .then(() => {
         setSentMessages((prev) => [
           ...prev,
           {
@@ -77,7 +76,6 @@ function MessageInformation({ userInfo }: Props) {
         ]);
         setMessage("");
         currentPostion.current = divRef.current?.scrollHeight || 0;
-        console.log("Message sent:", response);
       })
       .catch((error) => {
         setMessage("");
@@ -87,7 +85,6 @@ function MessageInformation({ userInfo }: Props) {
 
   useEffect(() => {
     if (divRef.current) {
-      console.log("scrolling to bottom");
       divRef.current.scrollTo(
         currentPostion.current,
         divRef.current.scrollHeight
@@ -149,7 +146,6 @@ function MessageInformation({ userInfo }: Props) {
                       createdAt: message.createdAt,
                     };
                   });
-                  //sort messages by date
                   messageData.sort((a, b) => {
                     return (
                       new Date(a.createdAt).getTime() -
@@ -157,7 +153,6 @@ function MessageInformation({ userInfo }: Props) {
                     );
                   });
                   setSentMessages(messageData);
-                  console.log("messages", messages.data);
                 })
                 .catch((error) => {
                   console.error("Error fetching messages:", error);
@@ -183,10 +178,8 @@ function MessageInformation({ userInfo }: Props) {
 
   function handleCloseMessage(e: MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    console.log("close message");
     setCurrentMessagingUsers((prev) => {
       const newUsers = prev.filter((user) => user.id !== userInfo.id);
-      console.log(newUsers);
       return newUsers;
     });
   }

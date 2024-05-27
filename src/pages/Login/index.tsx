@@ -48,10 +48,8 @@ function Login({ setHasAuthenticated }: Props) {
       username: email,
       password: password,
     })
-      .then((response) => {
-        console.log("user info", response.isSignedIn, response.nextStep);
+      .then(() => {
         setHasAuthenticated(true);
-        console.log("Signed in");
       })
       .catch((error) => {
         console.log("Error signing in", error);

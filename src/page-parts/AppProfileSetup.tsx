@@ -291,7 +291,6 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
 
   function closeProfileSetup() {
     setTempClose(true);
-    console.log("Close Profile Setup");
   }
 
   const closeButtons = [
@@ -336,7 +335,6 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
 
       try {
         const results = await result;
-        console.log("results", results);
         profilePicturePath = results.path;
       } catch (error) {
         setError("Error uploading profile picture");
@@ -353,20 +351,16 @@ function AppProfileSetup({ closeProfile, setCloseProfile }: Props) {
       interests: [newUserInformation.interests],
     };
 
-    console.log("newUserValues", newUserValues);
-
     client.models.User.update(newUserValues, {
       authMode: "userPool",
     })
       .then((response) => {
-        console.log("User updated successfully", response);
         setUserInformation(response.data as Schema["User"]["type"]);
         setTempClose(true);
         localStorage.setItem("closeProfile", "true");
       })
-      .catch((error) => {
+      .catch(() => {
         setError("Error updating user");
-        console.log("Error updating user", error);
       })
       .finally(() => {
         setLoadingSubmit(false);

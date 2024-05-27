@@ -52,14 +52,6 @@ function AppNavbar() {
       <div className="flex items-center justify-center">
         <div className="flex flex-1 gap-x-8 mr-16">
           <Brand />
-          {/* <Search
-            hasSearchIcon
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              console.log(e.target.value)
-            }
-            placeholder="Search"
-            value=""
-          /> */}
         </div>
         <NotificationDropdown jsxComponent={<Notification03Icon />} />
         <Dropdown

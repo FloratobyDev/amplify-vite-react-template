@@ -34,7 +34,6 @@ export default function AuthProvider({ children }: Props) {
   useEffect(() => {
     async function checkUser() {
       if (!hasAuthenticated && !hasUserInfo) {
-        console.log("getting current user");
         getCurrentUser()
           .then(async (response) => {
             client.models.User.get({
@@ -53,7 +52,6 @@ export default function AuthProvider({ children }: Props) {
             setHasAuthenticated(false);
           });
       } else if (hasAuthenticated && !hasUserInfo) {
-        console.log("getting user info");
         getCurrentUser().then(async (response) => {
           client.models.User.get({
             id: response.username,
@@ -67,7 +65,6 @@ export default function AuthProvider({ children }: Props) {
             });
         });
       } else if (!hasAuthenticated && hasUserInfo) {
-        console.log("clearing user info");
         setUserInformation(undefined);
         setHasUserInfo(false);
       }

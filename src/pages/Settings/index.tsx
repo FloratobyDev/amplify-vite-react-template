@@ -24,13 +24,11 @@ function Settings() {
   async function handleDeleteAccount() {
     if (doubleCheck) {
       if (!userInformation?.id) return;
-      console.log("Deleting account", userInformation);
       client.models.User.delete({ id: userInformation?.id })
         .then(async () => {
           if (userInformation?.profilePictureUrl) {
             remove({ path: userInformation?.profilePictureUrl })
               .then(async () => {
-                console.log("Profile picture deleted");
                 await deleteUser().then(async () => {
                   await signOut({ global: true });
                 });
@@ -39,7 +37,6 @@ function Settings() {
                 console.error("Error deleting profile picture", error);
               });
           } else {
-            console.log("Profile picture deleted");
             await deleteUser().then(async () => {
               await signOut({ global: true });
             });
